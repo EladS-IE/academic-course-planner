@@ -1,0 +1,2964 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>תכנון אקדמי - הנדסת תעשייה ומערכות מידע</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ================= THEME VARIABLES ================= */
+:root {
+  --bg-gradient: radial-gradient(circle at 50% -20%, #1e293b, #020617 80%);
+  --surface: rgba(30, 41, 59, 0.45);
+  --border: rgba(255, 255, 255, 0.08);
+  --primary: #38bdf8; 
+  --primary-hover: #0ea5e9;
+  --secondary: #8b5cf6; 
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-darker: #64748b;
+  --green-neon: #34d399;
+  --red-neon: #f87171;
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+  --header-bg: rgba(15, 23, 42, 0.8);
+  --input-bg: rgba(0,0,0,0.3);
+  --table-bg: rgba(15,23,42,0.8);
+  --table-head: rgba(2,6,23,0.8);
+}
+
+[data-theme="light"] {
+  --bg-gradient: #f0efe9; 
+  --surface: #ffffff;
+  --border: #e2ddd5;
+  --primary: #2563eb; 
+  --primary-hover: #1d4ed8;
+  --text-main: #1a1a1a;
+  --text-muted: #4a4540;
+  --text-darker: #8a8078;
+  --green-neon: #15803d;
+  --red-neon: #dc2626;
+  --glass-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+  --header-bg: #1a2f4a;
+  --input-bg: #ffffff;
+  --table-bg: #ffffff;
+  --table-head: #f8f9fa;
+}
+
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+body {
+  font-family: 'Heebo', sans-serif; background: var(--bg-gradient); background-attachment: fixed;
+  color: var(--text-main); font-size: 14px; min-height: 100vh; line-height: 1.5; transition: background 0.3s, color 0.3s;
+}
+
+header {
+  background: var(--header-bg); backdrop-filter: blur(16px); border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  position: sticky; top: 0; z-index: 100;
+}
+header h1 { font-size: 18px; font-weight: 700; background: linear-gradient(to left, #38bdf8, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+[data-theme="light"] header h1 { background: none; -webkit-text-fill-color: white; }
+.header-actions { display: flex; gap: 10px; align-items: center; }
+
+.hbtn { font-size: 12px; padding: 6px 14px; border: 1px solid var(--border); border-radius: 6px; background: rgba(255,255,255,0.03); color: var(--text-main); cursor: pointer; font-family: 'Heebo', sans-serif; font-weight: 500; transition: all 0.2s; }
+[data-theme="light"] .hbtn { color: white; border-color: rgba(255,255,255,0.3); }
+.hbtn:hover { background: rgba(255,255,255,0.1); }
+.hbtn.exp { border-color: rgba(52, 211, 153, 0.4); color: var(--green-neon); }
+[data-theme="light"] .hbtn.exp { color: #6ee7b7; }
+.hbtn.imp { border-color: rgba(56, 189, 248, 0.4); color: var(--primary); }
+[data-theme="light"] .hbtn.imp { color: #93c5fd; }
+.hbtn.undo { border-color: rgba(248, 113, 113, 0.4); color: var(--red-neon); display: none; }
+.hbtn.undo.active { display: inline-block; }
+.save-st { font-size: 11px; color: var(--text-muted); opacity: 0.8; }
+[data-theme="light"] .save-st { color: #93c5fd; }
+
+.tabs { display: flex; background: var(--header-bg); border-bottom: 1px solid var(--border); padding: 0 1rem; }
+.tab { padding: 12px 24px; cursor: pointer; color: var(--text-muted); font-size: 13px; font-weight: 600; border: none; background: none; border-bottom: 2px solid transparent; font-family: 'Heebo'; transition: all 0.2s; }
+[data-theme="light"] .tab { color: #94a3b8; }
+.tab:hover { color: var(--text-main); }
+[data-theme="light"] .tab:hover { color: white; }
+.tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+[data-theme="light"] .tab.active { color: #60a5fa; border-bottom-color: #60a5fa; background: rgba(255,255,255,0.05); }
+
+.content { padding: 2rem; max-width: 1400px; margin: 0 auto; }
+.hidden { display: none !important; }
+
+/* Toolbar & Planner */
+.toolbar { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem; gap: 15px; flex-wrap: wrap; }
+.search-input { padding: 8px 16px 8px 36px; background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); font-family: 'Heebo'; font-size: 13px; width: 280px; }
+.search-input:focus { outline: none; border-color: var(--primary); }
+.search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+
+.track-bar { display: flex; gap: 10px; flex-wrap: wrap; flex: 1; }
+.track-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; flex: 1; min-width: 150px; box-shadow: var(--glass-shadow); }
+.track-name { font-size: 10px; color: var(--text-muted); margin-bottom: 4px; font-weight: 700; text-transform: uppercase; }
+.track-vals { font-size: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+.tok { color: var(--green-neon); font-weight: 600; }
+.terr { color: var(--red-neon); font-weight: 600; }
+.tneutral { color: var(--text-muted); font-weight: 500; }
+
+.sem-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 1rem; }
+@media(max-width: 900px) { .sem-grid { grid-template-columns: 1fr; } }
+.semester { background: var(--surface); backdrop-filter: blur(12px); border: 1px solid var(--border); border-radius: 12px; padding: 16px; min-height: 200px; box-shadow: var(--glass-shadow); transition: all 0.2s; }
+.semester.drag-over { border-color: var(--primary); box-shadow: inset 0 0 20px rgba(56, 189, 248, 0.1); }
+.sem-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.sem-title { font-weight: 600; font-size: 16px; color: var(--text-main); }
+.sem-stats { text-align: left; font-size: 11px; color: var(--text-muted); }
+.sem-nz { font-weight: 700; color: var(--primary); font-size: 14px; }
+.drop-zone { min-height: 80px; display: flex; flex-direction: column; gap: 8px; }
+
+/* Course Cards */
+.course-card { border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; font-size: 13px; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; background: var(--input-bg); user-select: none; transition: all 0.2s; position: relative; }
+.course-card.movable { cursor: grab; }
+.course-card.movable:hover { border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.course-card.movable:active { cursor: grabbing; transform: translateY(0); }
+.course-card.dragging { opacity: 0.4; transform: scale(0.95); }
+.course-card.error { border-color: var(--red-neon); background: rgba(248,113,113,0.05); }
+[data-theme="light"] .course-card.error { background: #fef2f2; border-color: #fca5a5; }
+
+/* FIX 1: Bright courses when done (No Grayscale) */
+.course-card.done { opacity: 0.85; border-color: var(--border); border-width: 1px; }
+.course-card.done:hover { opacity: 1; border-color: var(--primary); }
+
+.course-card.search-hidden { opacity: 0.15; pointer-events: none; }
+
+.c-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; box-shadow: 0 0 8px currentColor; }
+.c-name { flex: 1; line-height: 1.4; font-weight: 500; }
+.c-hint { font-size: 10px; color: var(--text-darker); margin-top: 2px; }
+.c-alt-sem { margin-top: 4px; padding-top: 4px; border-top: 1px dashed var(--border); display: flex; flex-direction: column; gap: 2px; }
+.c-alt-sem-item { font-size: 10px; color: var(--text-muted); }
+.c-alt-sem-item b { color: var(--primary); font-weight: 600; }
+.c-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+.c-nz { font-size: 11px; color: var(--text-muted); font-weight: 600; }
+.prereq-icon { font-size: 11px; color: var(--secondary); cursor: help; margin-left: 4px; }
+
+.edit-btn { font-size: 10px; padding: 2px 8px; background: transparent; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; color: var(--text-muted); font-family: 'Heebo'; }
+.edit-btn:hover { border-color: var(--primary); color: var(--primary); background: rgba(56,189,248,0.1); }
+
+.c-tag { font-size: 10px; padding: 2px 8px; border-radius: 999px; white-space: nowrap; font-weight: 600; border: 1px solid; }
+.tag-mandatory { background: rgba(59,130,246,0.1); color: #60a5fa; border-color: rgba(59,130,246,0.3); }
+.tag-elective { background: rgba(16,185,129,0.05); color: #34d399; border-color: rgba(16,185,129,0.3); border-style: dashed; }
+.tag-judaism { background: rgba(236,72,153,0.1); color: #f472b6; border-color: rgba(236,72,153,0.3); }
+.tag-general { background: rgba(100,116,139,0.1); color: #94a3b8; border-color: rgba(100,116,139,0.3); }
+
+/* Elements */
+.error-box { background: rgba(248,113,113,0.05); border: 1px solid rgba(248,113,113,0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 10px; font-size: 13px; color: var(--red-neon); display: flex; justify-content: space-between; align-items: center; }
+.btn-fix { background: rgba(248,113,113,0.2); color: var(--red-neon); border: 1px solid rgba(248,113,113,0.4); padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; font-family: 'Heebo'; border: none;}
+
+.legend { display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; padding: 10px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--glass-shadow); }
+.leg { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+/* Modals */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); z-index: 2000; display: flex; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
+.modal { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 2rem; max-width: 620px; width: 100%; max-height: 90vh; overflow-y: auto; }
+.modal h2 { font-size: 18px; font-weight: 600; margin-bottom: 1.5rem; color: var(--text-main); border-bottom: 1px solid var(--border); padding-bottom: 8px;}
+.modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+
+.btn { padding: 8px 20px; border-radius: 8px; cursor: pointer; font-size: 13px; font-family: 'Heebo'; font-weight: 600; border: none; transition: all 0.2s; }
+.btn-save, .submit-btn, .btn-primary { background: var(--primary); color: #fff; }
+.btn-cancel { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+.btn-delete { background: transparent; border: 1px solid var(--red-neon); color: var(--red-neon); }
+
+.form-row { margin-bottom: 16px; }
+.form-row label { display: block; font-size: 11px; color: var(--text-muted); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; }
+input, select, .setting-input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; font-family: 'Heebo'; background-color: var(--input-bg) !important; color: var(--text-main) !important; }
+input:focus, select:focus { outline: none; border-color: var(--primary); }
+select option { background-color: #0f172a !important; color: #ffffff !important; }
+[data-theme="light"] select option { background-color: #ffffff !important; color: #1a1a1a !important; }
+
+/* FIX 2: Prereq Autocomplete Search UI */
+.prereq-search-wrap { position: relative; margin-bottom: 10px; }
+.prereq-dropdown { position: absolute; top: 100%; left: 0; right: 0; background: var(--surface); border: 1px solid var(--primary); border-radius: 8px; max-height: 150px; overflow-y: auto; z-index: 100; display: none; backdrop-filter: blur(10px); }
+.prereq-dropdown-item { padding: 8px 12px; cursor: pointer; font-size: 13px; color: var(--text-main); border-bottom: 1px solid var(--border); transition: background 0.2s; }
+.prereq-dropdown-item:hover { background: rgba(56, 189, 248, 0.2); }
+.sel-prereq-row { display: flex; justify-content: space-between; align-items: center; background: var(--input-bg); border: 1px solid var(--border); padding: 8px 12px; border-radius: 8px; margin-bottom: 6px; flex-wrap: wrap; gap: 6px; }
+.prereq-mode-chk { font-size: 11px !important; margin: 0 !important; display: flex; align-items: center; gap: 4px; color: var(--text-muted) !important; cursor: pointer; font-weight: 500 !important; text-transform: none !important; }
+
+.checkboxes { display: flex; gap: 15px; flex-wrap: wrap; margin-top: 6px; }
+.checkboxes label { display: flex; align-items: center; gap: 6px; font-size: 13px; cursor: pointer; color: var(--text-muted); text-transform: none;}
+
+.comp-section { border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; background: var(--input-bg); }
+.comp-section h4 { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; font-weight: 700; text-transform: uppercase; }
+.comp-item { background: transparent; border: 1px solid var(--border); border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+.comp-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
+.add-comp-btn, .add-slot-btn { background: transparent; border: 1px dashed var(--primary); color: var(--primary); border-radius: 6px; padding: 6px 14px; cursor: pointer; font-size: 12px; font-family: 'Heebo'; margin-top: 8px; font-weight: 600; }
+.remove-comp-btn, .remove-slot-btn { background: none; border: none; color: var(--text-darker); cursor: pointer; font-size: 14px; }
+.remove-comp-btn:hover, .remove-slot-btn:hover { color: var(--red-neon); }
+.color-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 6px; }
+.color-opt { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2); transition: all 0.2s; }
+.color-opt:hover { transform: scale(1.1); }
+.color-opt.selected { border-color: #fff; transform: scale(1.1); box-shadow: 0 0 8px currentColor; }
+
+/* Schedule */
+.sem-selector { display: flex; gap: 10px; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.sem-btn { padding: 8px 18px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; background: transparent; color: var(--text-muted); font-size: 13px; font-family: 'Heebo'; font-weight: 600; transition: all 0.2s; }
+.sem-btn.active { background: rgba(56,189,248,0.1); color: var(--primary); border-color: var(--primary); }
+
+.sch-wrap { overflow-x: auto; margin-bottom: 1.5rem; border-radius: 12px; border: 1px solid var(--border); background: var(--table-bg); box-shadow: var(--glass-shadow); }
+.sch-table { width: 100%; border-collapse: collapse; min-width: 640px; table-layout: fixed; }
+.sch-table th { background: var(--table-head); color: var(--text-muted); padding: 12px; font-size: 13px; text-align: center; font-weight: 600; border-bottom: 1px solid var(--border); }
+.time-col { width: 70px; background: var(--input-bg); border-left: 1px solid var(--border); }
+.time-slot-label { height: 50px; border-bottom: 1px solid var(--border); box-sizing: border-box; padding: 4px 8px; text-align: center; color: var(--text-darker); font-size: 11px; font-weight: 600; }
+.day-col { position: relative; width: calc((100% - 70px)/6); border-left: 1px solid var(--border); }
+.grid-line { height: 50px; border-bottom: 1px solid var(--border); opacity: 0.5; }
+
+[data-theme="light"] .sch-wrap { background: #ffffff; border-color: #e2ddd5; }
+[data-theme="light"] .sch-table th { background: #f8f9fa; color: #334155; }
+[data-theme="light"] .time-col { background: #f8fafc; border-left: 1px solid #e2ddd5; }
+[data-theme="light"] .day-col { border-left: 1px solid #e2ddd5; }
+[data-theme="light"] .grid-line { border-bottom: 1px solid #f1f5f9; }
+[data-theme="light"] .time-slot-label { color: #64748b; border-bottom: 1px solid #e2ddd5; }
+[data-theme="light"] .sem-btn { background: #ffffff; color: #475569; border-color: #cbd5e1; }
+[data-theme="light"] .sem-btn.active { background: #f0f9ff; color: #0369a1; border-color: #7dd3fc; }
+
+.sch-block { 
+  position: absolute; width: calc(100% - 4px); left: 2px; border-radius: 6px; padding: 4px 6px; 
+  font-size: 11px; cursor: pointer; overflow: visible; border-right-width: 4px; border-right-style: solid; 
+  box-sizing: border-box; text-align: right; transition: transform 0.2s;
+  display: flex; flex-direction: column;
+}
+.sch-block:hover { transform: scale(1.02); z-index: 100 !important; filter: brightness(1.1); }
+.sch-name { font-weight: 700; color: #fff; margin-bottom: 2px; white-space: normal; overflow-wrap: break-word; line-height: 1.15; }
+.sch-type { font-size: 10px; color: rgba(255,255,255,0.9); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 0; line-height: 1.1;}
+.collision-warning { color: #fff; background: var(--red-neon); padding: 2px 4px; border-radius: 4px; font-weight: bold; font-size: 9px; display: inline-block; margin-top: 4px; }
+.sch-block.collision { border-right-color: var(--red-neon) !important; background-color: rgba(248,113,113,0.3) !important; }
+
+.sch-editor { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+.sch-editor h3 { font-size: 14px; font-weight: 600; margin-bottom: 16px; color: var(--text-main); }
+.cse-row { padding: 12px 0; border-bottom: 1px solid var(--border); }
+.cse-name { font-weight: 600; font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+.cse-dot { width: 10px; height: 10px; border-radius: 50%; box-shadow: 0 0 8px currentColor; }
+.cse-comp-wrap { display: flex; flex-direction: column; gap: 12px; }
+
+.cse-comp-group { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; }
+.cse-comp-title { font-size: 12px; font-weight: 700; color: var(--text-main); margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px;}
+.cse-comp { 
+    display: flex; flex-direction: row; align-items: center; gap: 10px; flex-wrap: wrap; 
+    padding: 8px 12px; border-radius: 6px; background: var(--input-bg); border: 1px solid transparent; margin-bottom: 6px;
+}
+.cse-comp select { width: auto !important; padding: 4px 8px; font-size: 11px; }
+
+/* Settings / Manage */
+.manage-list, .settings-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; box-shadow: var(--glass-shadow); }
+.settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 1.5rem; }
+@media(max-width: 800px) { .settings-grid { grid-template-columns: 1fr; } }
+.setting-row, .manage-row { padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; }
+.section-label { font-size: 11px; color: var(--primary); font-weight: 700; margin: 15px 0 5px; padding-bottom: 4px; border-bottom: 1px solid var(--border); text-transform: uppercase; }
+.success-msg { background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); border-radius: 8px; padding: 10px 14px; font-size: 13px; color: var(--green-neon); margin-bottom: 16px; font-weight: 500; }
+
+/* Recommendations */
+.reco-wrap { margin-bottom: 1.5rem; }
+.reco-toggle-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; cursor: pointer; user-select: none; }
+.reco-toggle-row h3 { font-size: 14px; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+.reco-toggle-row .reco-chevron { font-size: 11px; color: var(--text-muted); transition: transform .2s; }
+.reco-toggle-row.open .reco-chevron { transform: rotate(90deg); }
+.reco-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+@media(max-width: 800px) { .reco-grid { grid-template-columns: 1fr; } }
+.reco-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; }
+.reco-card h4 { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.reco-desc { font-size: 11px; color: var(--text-muted); line-height: 1.5; margin-bottom: 12px; }
+.reco-days { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.day-chip { padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; font-size: 12px; cursor: pointer; background: transparent; color: var(--text-muted); font-family: 'Heebo'; }
+.day-chip.selected { background: rgba(56,189,248,0.15); border-color: var(--primary); color: var(--primary); }
+.reco-nz-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.reco-run-btn { background: var(--secondary); color: #fff; border: none; padding: 9px 18px; border-radius: 8px; cursor: pointer; font-size: 12px; font-weight: 700; font-family: 'Heebo'; }
+.reco-preview { margin-top: 14px; border-top: 1px solid var(--border); padding-top: 12px; }
+.reco-preview-title { font-size: 11px; font-weight: 700; color: var(--primary); margin-bottom: 8px; }
+.reco-diff-list { display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; margin-bottom: 12px; }
+.reco-diff-item { font-size: 12px; padding: 8px 10px; border-radius: 6px; background: var(--input-bg); border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.reco-actions { display: flex; gap: 8px; }
+.reco-apply-btn { background: var(--green-neon); color: #06281c; border: none; padding: 7px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 700; }
+.reco-discard-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); padding: 7px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600; }
+.reco-warn-msg { font-size: 12px; color: var(--red-neon); background: rgba(248,113,113,0.08); border: 1px solid rgba(248,113,113,0.3); border-radius: 6px; padding: 8px 10px; margin-bottom: 10px; }
+
+/* DRAG & DROP TRACK POOL */
+.track-pool-wrap { margin-top: 1.5rem; }
+.pool-area-title { font-size: 16px; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid var(--border); padding-bottom: 8px;}
+.pool-grid { display: grid; grid-template-columns: 1fr 2fr; gap: 20px; }
+@media(max-width: 900px) { .pool-grid { grid-template-columns: 1fr; } }
+.pool-zone { background: var(--surface); border: 1px dashed var(--border); border-radius: 12px; padding: 16px; min-height: 200px; display: flex; flex-direction: column; gap: 8px; transition: all 0.2s; }
+.pool-zone.drag-over { border-color: var(--primary); background: rgba(56,189,248,0.05); }
+.pool-assigned-tracks { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media(max-width: 600px) { .pool-assigned-tracks { grid-template-columns: 1fr; } }
+.track-block { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; transition: all 0.2s; min-height: 120px; }
+.track-block.drag-over { border-color: var(--green-neon); box-shadow: 0 0 15px rgba(52,211,153,0.2); }
+.track-block h4 { font-size: 13px; color: var(--primary); margin-bottom: 8px; font-weight: 700; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+.pool-course-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--input-bg); font-size: 12px; cursor: grab; font-weight: 500; transition: border-color 0.2s; flex-wrap: wrap;}
+.pool-course-item:active { cursor: grabbing; }
+.pool-course-item:hover { border-color: var(--primary); }
+.pool-course-top { display: flex; justify-content: space-between; align-items: center; width: 100%; font-weight: 600; color: var(--text-main); }
+.pool-course-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; width: 100%; }
+.pool-course-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; width: 100%; }
+.pool-assign-btn { font-size: 10px; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--green-neon); background: rgba(52,211,153,0.08); color: var(--green-neon); cursor: pointer; font-family: 'Heebo'; font-weight: 600; }
+.pool-assign-btn:hover { background: rgba(52,211,153,0.18); }
+.pool-move-btn { font-size: 10px; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--primary); background: rgba(56,189,248,0.08); color: var(--primary); cursor: pointer; font-family: 'Heebo'; font-weight: 600; }
+.pool-move-btn:hover { background: rgba(56,189,248,0.18); }
+.pool-return-btn { font-size: 10px; padding: 3px 9px; border-radius: 6px; border: 1px solid var(--text-muted); background: transparent; color: var(--text-muted); cursor: pointer; font-family: 'Heebo'; font-weight: 600; }
+.pool-return-btn:hover { background: rgba(255,255,255,0.06); }
+
+/* SUMMARY TAB */
+.summary-toolbar { display: flex; align-items: center; gap: 16px; margin-bottom: 1.25rem; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 16px; }
+.summary-toolbar-label { font-size: 13px; font-weight: 700; color: var(--text-main); }
+.summary-sem-checks { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--text-muted); }
+.summary-toolbar-sep { width: 1px; align-self: stretch; background: var(--border); }
+.summary-toggle-label { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; cursor: pointer; white-space: nowrap; }
+.summary-sem-block { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px; margin-bottom: 20px; box-shadow: var(--glass-shadow); }
+.summary-sem-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-weight: 700; color: var(--text-main); font-size: 15px; }
+.summary-sem-stats { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+.summary-empty-msg { font-size: 13px; color: var(--text-muted); padding: 20px; text-align: center; }
+.summary-list-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.summary-list-table th { text-align: right; padding: 8px 10px; color: var(--text-muted); font-size: 11px; font-weight: 700; border-bottom: 1px solid var(--border); }
+.summary-list-table td { padding: 8px 10px; border-bottom: 1px solid var(--border); color: var(--text-main); }
+.summary-list-table tr:last-child td { border-bottom: none; }
+/* ===================== PRINT / PDF EXPORT ===================== */
+@media print {
+  body * { visibility: hidden; }
+  #tab-summary, #tab-summary * { visibility: visible; }
+  #tab-summary { position: absolute; inset: 0; margin: 0; padding: 0; }
+  .summary-toolbar, .summary-toolbar * { display: none !important; }
+  .tabs, .app-header, .btn, button { display: none !important; }
+  .summary-sem-block { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; page-break-inside: avoid; margin-bottom: 14px; }
+  .sch-block, .track-card, .track-block, .pool-course-item {
+    -webkit-print-color-adjust: exact; print-color-adjust: exact; color-adjust: exact;
+  }
+  .sch-wrap { overflow: visible; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>תכנון אקדמי - הנדסת תעשייה ומערכות מידע</h1>
+  <div class="header-actions">
+    <span class="save-st" id="save-status">נשמר אוטומטית</span>
+    <button class="hbtn undo" id="undo-btn" onclick="undo()" title="בטל פעולה אחרונה">↩ ביטול</button>
+    <button class="hbtn" id="theme-toggle" onclick="toggleTheme()" title="החלף מצב תצוגה">☀️ מצב בהיר</button>
+    <button class="hbtn exp" onclick="exportData()">ייצוא ⬇</button>
+    <button class="hbtn imp" onclick="document.getElementById('import-input').click()">ייבוא ⬆</button>
+    <input type="file" id="import-input" accept=".json" style="display:none" onchange="importData(event)">
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('planner')">תכנון סמסטרים</button>
+  <button class="tab" onclick="showTab('schedule')">מערכת שעות</button>
+  <button class="tab" onclick="showTab('add')">ניהול קורסים ומאגר בחירה</button>
+  <button class="tab" onclick="showTab('summary')">📋 תצוגת סיכום</button>
+  <button class="tab" onclick="showTab('settings')">⚙ הגדרות תואר</button>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay hidden" id="modal-overlay">
+  <div class="modal">
+    <h2 id="modal-title">עריכת קורס</h2>
+    <input type="hidden" id="edit-id">
+    <div class="form-row"><label>שם הקורס</label><input type="text" id="edit-name"></div>
+    <div class="form-row"><label>נ"ז</label><input type="number" id="edit-nz" step="0.5" min="0.5" max="30" style="width:110px"></div>
+    <div class="form-row"><label>דרך הערכה</label><select id="edit-eval-method" style="width:110px"><option value="exam">📝 מבחן</option><option value="assignment">📄 עבודה</option><option value="other">🔹 אחר</option></select></div>
+    <div class="form-row">
+      <label>סיווג ראשי</label>
+      <select id="edit-type" onchange="toggleTrackTagsVisibility('edit'); updateEditTypeColor()"></select>
+    </div>
+    <div class="form-row" id="edit-track-container" style="display:none;">
+      <label style="color:var(--primary);">שיוכים אפשריים במאגר למסלולים (בחר את כל מה שמתאים)</label>
+      <div class="checkboxes" id="edit-tracktags"></div>
+    </div>
+    
+    <!-- FIX 2: Prereqs AutoComplete -->
+    <div class="form-row">
+      <label title="קורסים שחייבים להילמד לפני קורס זה">קורסי קדם (הקלד לחיפוש והוספה)</label>
+      <div class="prereq-search-wrap">
+        <input type="text" id="edit-prereq-search" placeholder="🔍 חפש קורס..." oninput="handlePrereqSearch('edit')" autocomplete="off">
+        <div id="edit-prereq-dropdown" class="prereq-dropdown"></div>
+      </div>
+      <div id="edit-prereqs-container"></div>
+    </div>
+
+    <div class="form-row"><label>צבע תווית</label><div class="color-row" id="edit-color-row"></div></div>
+    <div class="form-row">
+      <label>סמסטרים אפשריים לגרירה</label>
+      <div class="checkboxes">
+        <label><input type="checkbox" class="edit-sem-check" value="5" onchange="updateSlotSems('edit')"> ס' 5</label>
+        <label><input type="checkbox" class="edit-sem-check" value="6" onchange="updateSlotSems('edit')"> ס' 6</label>
+        <label><input type="checkbox" class="edit-sem-check" value="7" onchange="updateSlotSems('edit')"> ס' 7</label>
+        <label><input type="checkbox" class="edit-sem-check" value="8" onchange="updateSlotSems('edit')"> ס' 8</label>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>נעילת סמסטר (קבוע)</label>
+      <select id="edit-fixed">
+        <option value="">לא נעול — ניתן לגרירה</option>
+        <option value="5">נעול בסמסטר 5</option><option value="6">נעול בסמסטר 6</option>
+        <option value="7">נעול בסמסטר 7</option><option value="8">נעול בסמסטר 8</option>
+      </select>
+    </div>
+    <div class="comp-section">
+      <h4>רכיבי הוראה (הרצאה / תרגול)</h4>
+      <div id="edit-components"></div>
+      <button class="add-comp-btn" onclick="addEditComp()">+ הוסף רכיב חדש</button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-delete" onclick="deleteFromModal()">מחק קורס</button>
+      <button class="btn btn-cancel" onclick="closeModal()">ביטול</button>
+      <button class="btn btn-save" onclick="saveEdit()">שמור שינויים</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay hidden" id="add-modal-overlay">
+  <div class="modal">
+    <h2>הוספת קורס חדש</h2>
+    <div class="form-row"><label>שם הקורס</label><input type="text" id="f-name" placeholder="הכנס שם..."></div>
+    <div class="form-row"><label>נ"ז</label><input type="number" id="f-nz" step="0.5" min="0.5" value="3" style="width:110px"></div>
+    <div class="form-row"><label>דרך הערכה</label><select id="f-eval-method" style="width:110px"><option value="exam">📝 מבחן</option><option value="assignment">📄 עבודה</option><option value="other">🔹 אחר</option></select></div>
+    <div class="form-row"><label>סיווג ראשי</label><select id="f-type" onchange="toggleTrackTagsVisibility('add'); updateAddTypeColor()"></select></div>
+    <div class="form-row" id="add-track-container" style="display:none;">
+      <label style="color:var(--primary);">שיוכים אפשריים במאגר למסלולים</label>
+      <div class="checkboxes" id="f-tracktags"></div>
+    </div>
+    
+    <!-- FIX 2: Prereqs AutoComplete -->
+    <div class="form-row">
+      <label>קורסי קדם (הקלד לחיפוש והוספה)</label>
+      <div class="prereq-search-wrap">
+        <input type="text" id="add-prereq-search" placeholder="🔍 חפש קורס..." oninput="handlePrereqSearch('add')" autocomplete="off">
+        <div id="add-prereq-dropdown" class="prereq-dropdown"></div>
+      </div>
+      <div id="add-prereqs-container"></div>
+    </div>
+
+    <div class="form-row"><label>צבע תווית</label><div class="color-row" id="add-color-row"></div></div>
+    <div class="form-row">
+      <label>סמסטרים אפשריים לגרירה</label>
+      <div class="checkboxes">
+        <label><input type="checkbox" class="sem-check" value="5" onchange="updateSlotSems('add')"> ס' 5</label>
+        <label><input type="checkbox" class="sem-check" value="6" onchange="updateSlotSems('add')"> ס' 6</label>
+        <label><input type="checkbox" class="sem-check" value="7" onchange="updateSlotSems('add')"> ס' 7</label>
+        <label><input type="checkbox" class="sem-check" value="8" onchange="updateSlotSems('add')"> ס' 8</label>
+      </div>
+    </div>
+    <div class="form-row">
+      <label>נעילת סמסטר (לא חובה)</label>
+      <select id="f-fixed"><option value="">ללא נעילה</option><option value="5">ס' 5</option><option value="6">ס' 6</option><option value="7">ס' 7</option><option value="8">ס' 8</option></select>
+    </div>
+    <div class="comp-section"><h4>רכיבי הוראה</h4><div id="add-components"></div><button class="add-comp-btn" onclick="addAddComp()">+ רכיב</button></div>
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeAddModal()">ביטול</button>
+      <button class="btn btn-save" onclick="addCourse()">הוסף קורס</button>
+    </div>
+  </div>
+</div>
+
+<!-- Main Content -->
+<div id="tab-planner" class="content">
+  <div class="toolbar">
+    <div class="track-bar" id="track-bar"></div>
+    <div class="search-box">
+      <input type="text" id="course-search" class="search-input" placeholder="חיפוש קורס..." oninput="handleSearch()">
+      <span class="search-icon">🔍</span>
+    </div>
+  </div>
+  <div id="error-list"></div>
+  <div class="sem-grid" id="sem-grid"></div>
+</div>
+
+<div id="tab-schedule" class="content hidden">
+  <div class="reco-wrap">
+    <div class="reco-toggle-row open" id="reco-toggle" onclick="toggleRecoPanel()"><span class="reco-chevron">▶</span><h3>💡 המלצות מערכת</h3></div>
+    <div id="reco-body"></div>
+  </div>
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 10px;">
+    <div class="sem-selector" id="sem-selector" style="margin-bottom: 0;"></div>
+    <div style="display: flex; align-items: center; gap: 8px; background: var(--surface); padding: 4px 12px; border-radius: 8px; border: 1px solid var(--border);">
+      <span style="font-size:12px; color:var(--text-muted); font-weight:600;">עיצוב:</span>
+      <select id="block-style-select" onchange="updateBlockStyle(this.value)" style="width:auto; padding:4px 24px 4px 8px; font-size:12px; background:transparent!important; border:none; color:var(--text-main)!important; outline:none;">
+        <option value="striped">פסים</option><option value="solid">חלש</option><option value="bold">חזק</option>
+      </select>
+      <span style="width:1px; height:16px; background:var(--border);"></span>
+      <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--text-muted); cursor:pointer; white-space:nowrap;">
+        <input type="checkbox" id="collision-highlight-toggle" onchange="toggleScheduleCollisionHighlight(this.checked)"> ⚠️ הדגש התנגשויות
+      </label>
+    </div>
+  </div>
+  <div class="sch-wrap"><table class="sch-table" id="sch-table"></table></div>
+  <div class="sch-editor">
+    <h3>הגדרת שעות ואופציות פר-סמסטר</h3>
+    <div id="cse-list"></div>
+  </div>
+</div>
+
+<div id="tab-add" class="content hidden">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+     <h2 style="font-size:20px; font-weight:700;">ניהול קורסים ומאגר בחירה</h2>
+     <button class="btn btn-primary" onclick="openAddModal()">➕ הוסף קורס חדש</button>
+  </div>
+  <div id="success-msg" class="success-msg hidden">הקורס נוסף בהצלחה!</div>
+  
+  <div class="manage-list" style="margin-bottom: 2rem;"><h3>מאגר קורסים כללי</h3><div id="manage-list-content"></div></div>
+
+  <div class="track-pool-wrap">
+    <div class="pool-area-title">🎯 שיבוץ קורסי בחירה למסלולים (גרור ושחרר)</div>
+    <div class="reco-card" style="margin-bottom:16px;">
+      <h4>📊 המלצת נ"ז לקורסי בחירה</h4>
+      <p class="reco-desc">קובע יעד נ"ז כולל לכל קורסי הבחירה. ההמלצה יכולה גם <b>להזיז קורסים שכבר שיבצת</b> אם זה מוביל לתוצאה טובה יותר (למשל להעביר קורס קטן למקום שבו הוא נחוץ יותר, ולפנות את מקומו לקורס קטן יותר) — תמיד תראה תצוגה מקדימה של כל שינוי לפני שמאשרים. היא תמיד תמשיך לעמוד בדרישות המינימום של כל מסלול (2 חובה + 2 בחירה, 12 קורסים שונים בסה"כ).</p>
+      <div class="reco-nz-row">
+        <label style="font-size:12px;color:var(--text-muted)">יעד נ"ז כולל לבחירה:</label>
+        <input type="number" id="elective-nz-target-input" step="0.5" min="0" value="${recoElectiveNzTarget!==null?recoElectiveNzTarget:''}" placeholder="לדוגמה 12" style="padding:6px;width:80px">
+      </div>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="reco-run-btn" onclick="runElectiveNzRecommendation()">חשב המלצה</button>
+        <button class="reco-run-btn" style="background:var(--text-muted);" onclick="runElectiveNzMinimum()">📉 מינימום (הכי מעט נ"ז)</button>
+      </div>
+      <div id="elective-nz-preview"></div>
+    </div>
+    <div class="reco-card" style="margin-bottom:16px;">
+      <h4>🧪 המלצה לפי דרך הערכה</h4>
+      <p class="reco-desc">כמו ההמלצה לפי נ"ז, רק שמחפשת שיבוץ שממקסם קורסי בחירה עם דרך ההערכה שתבחר — בלי לפגוע במינימום הנדרש לכל מסלול, ובלי להציע אף פעם קורס שמתנגש בפועל עם משהו במערכת השעות שלך.</p>
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+        <button type="button" class="day-chip selected" id="eval-pref-exam" onclick="setRecoEvalPreference('exam')">📝 עדיפות למבחנים</button>
+        <button type="button" class="day-chip" id="eval-pref-assignment" onclick="setRecoEvalPreference('assignment')">📄 עדיפות לעבודות</button>
+        <button type="button" class="day-chip" id="eval-pref-other" onclick="setRecoEvalPreference('other')">🔹 עדיפות ל"אחר"</button>
+      </div>
+      <button class="reco-run-btn" onclick="runElectiveEvalRecommendation()">חשב המלצה</button>
+      <div id="elective-eval-preview"></div>
+    </div>
+    <div class="pool-grid" id="track-pool-body"></div>
+  </div>
+</div>
+
+<div id="tab-summary" class="content hidden">
+  <div class="summary-toolbar">
+    <span class="summary-toolbar-label">הצג סמסטרים:</span>
+    <div class="summary-sem-checks">
+      <label><input type="checkbox" class="summary-sem-check" value="5" checked onchange="renderSummary()"> סמ' 5</label>
+      <label><input type="checkbox" class="summary-sem-check" value="6" checked onchange="renderSummary()"> סמ' 6</label>
+      <label><input type="checkbox" class="summary-sem-check" value="7" checked onchange="renderSummary()"> סמ' 7</label>
+      <label><input type="checkbox" class="summary-sem-check" value="8" checked onchange="renderSummary()"> סמ' 8</label>
+    </div>
+    <span class="summary-toolbar-sep"></span>
+    <label class="summary-toggle-label"><input type="checkbox" id="summary-highlight-collisions" checked onchange="settings.highlightScheduleCollisions=this.checked;saveData(false);renderSummary()"> ⚠️ הדגש התנגשויות בזמן</label>
+    <label class="summary-toggle-label"><input type="radio" name="summary-view-mode" value="grid" checked onchange="renderSummary()"> 🗓️ לוח שבועי</label>
+    <label class="summary-toggle-label"><input type="radio" name="summary-view-mode" value="list" onchange="renderSummary()"> 📋 רשימה + שיבוץ מסלולים</label>
+    <button class="btn btn-primary" style="margin-inline-start:auto; padding:6px 14px; font-size:12px;" onclick="window.print()">🖨️ הדפסה / ייצוא PDF</button>
+  </div>
+  <div id="summary-track-bar" class="track-bar" style="margin-bottom:1.5rem"></div>
+  <div id="summary-body"></div>
+</div>
+
+<div id="tab-settings" class="content hidden">
+  <div class="settings-grid">
+    <div class="settings-card"><h3>מסלולים</h3><div id="track-settings"></div></div>
+    <div class="settings-card"><h3>דרישות כלליות</h3><div id="general-settings"></div></div>
+  </div>
+  <div class="settings-card" style="max-width:700px">
+    <h3>שמות רכיבי הוראה</h3>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:10px">התאמה אישית לכתיבה של כל סוג רכיב — שימושי אם משתפים את הכלי עם מסלול/תואר שמשתמש במונחים אחרים.</p>
+    <div id="comptype-settings"></div>
+  </div>
+  <div class="settings-card" style="max-width:700px">
+    <h3>קטגוריות מיוחדות (כגון שפה / כללי)</h3>
+    <div id="cat-settings"></div>
+    <div style="display:flex;gap:10px;align-items:flex-end;margin-top:15px;padding-top:15px;border-top:1px solid var(--border)">
+      <div class="form-row" style="flex:1; margin:0;"><label>שם קטגוריה חדשה</label><input type="text" id="new-cat-name" placeholder="למשל: אבני פינה..."></div>
+      <button class="btn btn-primary" onclick="addCategory()">הוסף קטגוריה</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const DAYS = ['ראשון','שני','שלישי','רביעי','חמישי','שישי'];
+const HOURS = ['8:00','9:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00','22:00','23:00'];
+const ROW_HEIGHT = 50; 
+const PALETTE = ['#3b82f6','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#84cc16','#f97316','#6366f1','#14b8a6','#a855f7','#64748b','#d97706','#0ea5e9'];
+
+const TYPE_DEFAULTS = {
+  'mandatory':{label:'חובה',cls:'tag-mandatory',color:'#3b82f6'},
+  'elective':{label:'בחירה',cls:'tag-elective',color:'#10b981'},
+  'judaism':{label:'יהדות',cls:'tag-judaism',color:'#ec4899'},
+  'general':{label:'כללי',cls:'tag-general',color:'#64748b'}
+};
+
+const TRACK_TAGS = ['ml-core','ml-elec','or-core','or-elec','is-core','is-elec'];
+const TRACK_LABELS = { 'ml-core':'למ"מ חובה', 'ml-elec':'למ"מ בחירה', 'or-core':'חק"ב חובה', 'or-elec':'חק"ב בחירה', 'is-core':'מערכות חובה', 'is-elec':'מערכות בחירה' };
+
+const TRACK_COLORS = {
+    'ml': { core: '#2563eb', elec: '#60a5fa' },
+    'or': { core: '#ea580c', elec: '#fb923c' },
+    'is': { core: '#7c3aed', elec: '#a78bfa' }
+};
+
+const DEFAULT_COURSES = [
+    {
+      "id": "c1",
+      "name": "מודלים בניהול פרויקטים",
+      "type": "mandatory",
+      "sem": 5,
+      "nz": 4,
+      "fixed": true,
+      "canMove": [5],
+      "color": "#f59e0b",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "0","start": "10:00","end": "13:00","checked": true,"sem": ""}]},{"type": "tirgul","slots": [{"day": "0","start": "13:00","end": "14:00","checked": true,"sem": ""}]}]
+    },
+    {
+      "id": "c2",
+      "name": "תפעול מערכות ייצור ושירות",
+      "type": "mandatory",
+      "sem": 5,
+      "nz": 4,
+      "fixed": true,
+      "canMove": [5],
+      "color": "#06b6d4",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "1","start": "12:00","end": "15:00","checked": true,"sem": ""}]},{"type": "tirgul","slots": [{"day": "1","start": "15:00","end": "16:00","checked": true,"sem": ""}]}]
+    },
+    {
+      "id": "c3",
+      "name": "התנהגות ארגונית",
+      "type": "mandatory",
+      "sem": 5,
+      "nz": 4,
+      "fixed": true,
+      "canMove": [5,7],
+      "color": "#8b5cf6",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "2","start": "12:00","end": "15:00","checked": true,"sem": ""}]},{"type": "tirgul","slots": [{"day": "2","start": "15:00","end": "16:00","checked": true,"sem": ""}]}]
+    },
+    {
+      "id": "c4",
+      "name": "סטטיסטיקה תעשייתית וכלי תכנה",
+      "type": "mandatory",
+      "sem": 5,
+      "nz": 4,
+      "fixed": true,
+      "canMove": [5],
+      "color": "#84cc16",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "2","start": "9:00","end": "12:00","checked": true,"sem": ""}]},{"type": "tirgul","slots": [{"day": "0","start": "9:00","end": "10:00","checked": true,"sem": ""}]}]
+    },
+    {
+      "id": "c5",
+      "name": "רשתות מחשבים ואינטרנט",
+      "type": "mandatory",
+      "sem": 5,
+      "nz": 4,
+      "fixed": true,
+      "canMove": [5],
+      "color": "#f97316",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "3","start": "13:00","end": "16:00","checked": true,"sem": ""}]},{"type": "tirgul","slots": [{"day": "0","start": "16:00","end": "17:00","checked": true,"sem": ""},{"day": "1","start": "11:00","end": "12:00","checked": false,"sem": ""},{"day": "3","start": "12:00","end": "13:00","checked": false,"sem": ""}]}]
+    },
+    {
+      "id": "c6",
+      "name": "מבוא לתורת המשחקים",
+      "type": "elective",
+      "sem": 5,
+      "nz": 3,
+      "fixed": false,
+      "canMove": [5,7],
+      "color": "#ea580c",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "1","start": "10:00","end": "12:00","checked": true}]},{"type": "tirgul","slots": [{"sem": "","day": "1","start": "9:00","end": "10:00","checked": true}]}],
+      "trackTags": ["or-core"],
+      "assignedTrack": "or-core"
+    },
+    {
+      "id": "c8",
+      "name": "פרויקט 1",
+      "type": "mandatory",
+      "sem": 6,
+      "nz": 3,
+      "fixed": true,
+      "canMove": [6],
+      "color": "#f59e0b",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "1","start": "16:00","end": "19:00","checked": true,"sem": ""}]}]
+    },
+    {
+      "id": "c9",
+      "name": "מנשקים והצגת מידע",
+      "type": "mandatory",
+      "sem": 6,
+      "nz": 3,
+      "fixed": true,
+      "canMove": [6],
+      "color": "#84cc16",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "1","start": "13:00","end": "15:00","checked": true,"sem": ""}]},{"type": "tirgul","slots": [{"day": "1","start": "15:00","end": "16:00","checked": true,"sem": ""}]}]
+    },
+    {
+      "id": "c10",
+      "name": "סימולציה",
+      "type": "mandatory",
+      "sem": 6,
+      "nz": 3.5,
+      "fixed": true,
+      "canMove": [6],
+      "color": "#f97316",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "2","start": "11:00","end": "13:00","checked": true,"sem": ""}]},{"type": "tirgul","slots": [{"day": "2","start": "13:00","end": "14:00","checked": true,"sem": ""}]},{"type": "lab","slots": [{"day": "2","start": "14:00","end": "15:00","checked": true,"sem": ""}]}]
+    },
+    {
+      "id": "c11",
+      "name": "מעבדה במדעי המידע",
+      "type": "elective",
+      "sem": 6,
+      "nz": 4,
+      "fixed": false,
+      "canMove": [6],
+      "color": "#2563eb",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "1","start": "9:00","end": "10:00","checked": true}]},{"type": "lab","slots": [{"sem": "","day": "1","start": "10:00","end": "13:00","checked": true}]}],
+      "trackTags": ["ml-core"],
+      "assignedTrack": "ml-core"
+    },
+    {
+      "id": "c12",
+      "name": "תכן מערכות ייצור ורובוטיקה",
+      "type": "elective",
+      "sem": 6,
+      "nz": 5,
+      "fixed": false,
+      "canMove": [6],
+      "color": "#ea580c",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "4","start": "16:00","end": "18:00","checked": true}]},{"type": "lab","slots": [{"sem": "","day": "2","start": "15:00","end": "17:00","checked": true}]},{"type": "tirgul","slots": [{"sem": "","day": "2","start": "17:00","end": "18:00","checked": true}]}],
+      "trackTags": ["or-core"],
+      "assignedTrack": "or-core"
+    },
+    {
+      "id": "c21",
+      "name": "בינה עסקית Big Data",
+      "type": "elective",
+      "sem": 8,
+      "nz": 4,
+      "fixed": false,
+      "canMove": [6,8],
+      "color": "#a78bfa",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "0","start": "11:00","end": "14:00","checked": true}]},{"type": "tirgul","slots": [{"sem": "","day": "0","start": "14:00","end": "15:00","checked": true}]}],
+      "trackTags": ["ml-elec","is-elec"],
+      "assignedTrack": "is-elec"
+    },
+    {
+      "id": "c13",
+      "name": "פרויקט שנתי חלק א'",
+      "type": "mandatory",
+      "sem": 7,
+      "nz": 3,
+      "fixed": true,
+      "canMove": [7],
+      "color": "#3b82f6",
+      "prereqIds": ["c8"],
+      "components": [{"type": "lecture","slots": [{"day": "","start": "","end": "","checked": false,"sem": ""}]}]
+    },
+    {
+      "id": "c14",
+      "name": "שיטות בתכן הנדסי",
+      "type": "mandatory",
+      "sem": 7,
+      "nz": 3,
+      "fixed": true,
+      "canMove": [7],
+      "color": "#3b82f6",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "","start": "","end": "","checked": false,"sem": ""}]}]
+    },
+    {
+      "id": "c15",
+      "name": "מבוא ללמידה עמוקה",
+      "type": "elective",
+      "sem": 6,
+      "nz": 3,
+      "fixed": false,
+      "canMove": [6,7],
+      "color": "#2563eb",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"sem": "7","day": "3","start": "13:00","end": "15:00","checked": true},{"sem": "6","day": "2","start": "18:00","end": "20:00","checked": false}]},{"type": "tirgul","slots": [{"sem": "7","day": "3","start": "12:00","end": "13:00","checked": true},{"sem": "7","day": "3","start": "15:00","end": "16:00","checked": false},{"sem": "6","day": "3","start": "12:00","end": "13:00","checked": false}]}],
+      "trackTags": ["ml-core"],
+      "assignedTrack": "ml-core"
+    },
+    {
+      "id": "c16",
+      "name": "אופטימיזציה",
+      "type": "elective",
+      "sem": 7,
+      "nz": 3,
+      "fixed": false,
+      "canMove": [7],
+      "color": "#fb923c",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "2","start": "16:00","end": "19:00","checked": true}]}],
+      "trackTags": ["or-elec"],
+      "assignedTrack": "or-elec"
+    },
+    {
+      "id": "c17",
+      "name": "חישוב מבוזר",
+      "type": "elective",
+      "sem": 7,
+      "nz": 4,
+      "fixed": false,
+      "canMove": [5,7],
+      "color": "#7c3aed",
+      "prereqIds": ["c12"],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "1","start": "12:00","end": "14:00","checked": true}]},{"type": "tirgul","slots": [{"sem": "","day": "1","start": "14:00","end": "15:00","checked": true},{"sem": "","day": "3","start": "15:00","end": "16:00","checked": false}]}],
+      "trackTags": ["is-core"],
+      "assignedTrack": "is-core"
+    },
+    {
+      "id": "c18",
+      "name": "אחזור מידע",
+      "type": "elective",
+      "sem": 7,
+      "nz": 4,
+      "fixed": false,
+      "canMove": [7],
+      "color": "#10b981",
+      "prereqIds": ["c15"],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "0","start": "12:00","end": "15:00","checked": true}]},{"type": "tirgul","slots": [{"sem": "","day": "0","start": "15:00","end": "16:00","checked": true}]}],
+      "trackTags": ["is-elec"],
+      "assignedTrack": null
+    },
+    {
+      "id": "c19",
+      "name": "עקרונות השיווק",
+      "type": "mandatory",
+      "sem": 8,
+      "nz": 3,
+      "fixed": true,
+      "canMove": [8],
+      "color": "#3b82f6",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "","start": "","end": "","checked": false,"sem": ""}]}]
+    },
+    {
+      "id": "c20",
+      "name": "פרויקט שנתי חלק ב'",
+      "type": "mandatory",
+      "sem": 8,
+      "nz": 3,
+      "fixed": true,
+      "canMove": [8],
+      "color": "#3b82f6",
+      "prereqIds": ["c13"],
+      "components": [{"type": "lecture","slots": [{"day": "","start": "","end": "","checked": false,"sem": ""}]}]
+    },
+    {
+      "id": "c22",
+      "name": "מודלים במסחר אלקטרוני",
+      "type": "elective",
+      "sem": 8,
+      "nz": 3,
+      "fixed": false,
+      "canMove": [6,8],
+      "color": "#7c3aed",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "3","start": "13:00","end": "15:00","checked": true}]},{"type": "tirgul","slots": [{"sem": "","day": "3","start": "15:00","end": "16:00","checked": true}]}],
+      "trackTags": ["is-core"],
+      "assignedTrack": "is-core"
+    },
+    {
+      "id": "c23",
+      "name": "נושאים נבחרים במערכות מידע",
+      "type": "elective",
+      "sem": 8,
+      "nz": 3,
+      "fixed": false,
+      "canMove": [8],
+      "color": "#a78bfa",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "1","start": "12:00","end": "14:00","checked": true}]},{"type": "tirgul","slots": [{"sem": "","day": "1","start": "14:00","end": "15:00","checked": true}]}],
+      "trackTags": ["is-elec"],
+      "assignedTrack": "is-elec"
+    },
+    {
+      "id": "c24",
+      "name": "עיבוד שפות טבעיות בטכניקות למידה עמוקה",
+      "type": "elective",
+      "sem": 7,
+      "nz": 3,
+      "fixed": false,
+      "canMove": [7],
+      "color": "#60a5fa",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "1","start": "17:00","end": "20:00","checked": true}]}],
+      "trackTags": ["ml-elec"],
+      "assignedTrack": "ml-elec"
+    },
+    {
+      "id": "c25",
+      "name": "כריית תהליכים",
+      "type": "elective",
+      "sem": 8,
+      "nz": 3,
+      "fixed": false,
+      "canMove": [8],
+      "color": "#fb923c",
+      "prereqIds": [],
+      "components": [{"type": "lecture","slots": [{"day": "","start": "","end": "","checked": false,"sem": ""}]}],
+      "trackTags": ["or-elec"],
+      "assignedTrack": null
+    },
+    {
+      "id": "custom_1783214611297",
+      "name": "למידת מכונה עם גרפים",
+      "type": "elective",
+      "nz": 3,
+      "color": "#60a5fa",
+      "fixed": false,
+      "sem": 8,
+      "canMove": [6,8],
+      "prereqIds": ["c12","c15"],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "1","start": "15:00","end": "17:00","checked": true}]},{"type": "lecture","slots": [{"sem": "","day": "1","start": "17:00","end": "18:00","checked": true}]}],
+      "trackTags": ["ml-elec"],
+      "assignedTrack": "ml-elec"
+    },
+    {
+      "id": "custom_1783214757192",
+      "name": "חיפוש בבינה מלאכותית",
+      "type": "elective",
+      "nz": 3,
+      "color": "#fb923c",
+      "fixed": false,
+      "sem": 8,
+      "canMove": [8],
+      "prereqIds": ["c12","c15"],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "1","start": "15:00","end": "17:00","checked": false}]},{"type": "tirgul","slots": [{"sem": "","day": "1","start": "17:00","end": "18:00","checked": false}]}],
+      "trackTags": ["or-elec"],
+      "assignedTrack": "or-elec"
+    },
+    {
+      "id": "custom_1783243835572",
+      "name": "כריית מידע וייצוג מידע",
+      "type": "mandatory",
+      "nz": 3,
+      "color": "#3b82f6",
+      "fixed": true,
+      "sem": 6,
+      "canMove": [6],
+      "prereqIds": ["c2"],
+      "components": [{"type": "lecture","slots": [{"sem": "","day": "4","start": "10:00","end": "12:00","checked": false}]},{"type": "lecture","slots": [{"sem": "","day": "3","start": "11:00","end": "12:00","checked": false}]}],
+      "trackTags": [],
+      "assignedTrack": null
+    }
+];
+
+const DEFAULT_SETTINGS = {
+    "targetTotalNz": 175.5, "targetTotalNzLabel": "הנדסה", "priorNz": 0, "targetTotalCourses": 40, "priorCourses": 0,
+    "tracks": {
+      "ml": { "name": "למידת מכונה", "coreMin": 2, "elecMin": 2, "reqType": "count" },
+      "or": { "name": "חקר ביצועים", "coreMin": 2, "elecMin": 2, "reqType": "count" },
+      "is": { "name": "מערכות מידע", "coreMin": 2, "elecMin": 2, "reqType": "count" }
+    },
+    "categories": [{ "id": "cat_1775938215901", "name": "יהדות", "required": 0, "done": 0, "type": "cat_1775938215901", "reqType": "count" }],
+    "blockStyle": "solid",
+    "highlightScheduleCollisions": true,
+    "compTypeLabels": { "lecture": "הרצאה", "tirgul": "תרגול", "lab": "מעבדה", "other": "אחר" }
+};
+
+let courses = [];
+let settings = {};
+let dragId = null;
+let activeSem = 5;
+let editCompCount = 0; let addCompCount = 0;
+let editSelectedColor = '#3b82f6'; let addSelectedColor = '#3b82f6';
+let searchQuery = '';
+let historyStack = [];
+
+// Reco state
+let recoPanelOpen = true;
+let recoPreferredDays = [];   
+let recoMaxNz = null;         
+let pendingDayPlan = null;    
+let pendingNzPlan = null;     
+let recoSemBias = 'balance';  // 'balance' | 'relief3' | 'relief4'
+let pendingSemPlan = null;
+let pendingElectiveNzPlan = null;
+let recoElectiveNzTarget = null;
+let recoEvalPreference = 'exam';
+let pendingElectiveEvalPlan = null;
+
+// Prereqs UI State
+let currentPrereqsList = [];
+
+// ===================== DATA & MIGRATION =====================
+function runMigrationScripts() {
+    try {
+        let migrated = false;
+        if(!Array.isArray(courses)) courses = [];
+        courses.forEach(c => {
+            if (['ml-core', 'ml-elec', 'or-core', 'or-elec', 'is-core', 'is-elec'].includes(c.type)) {
+                let oldType = c.type;
+                c.type = 'elective';
+                c.trackTags = [oldType];
+                c.assignedTrack = oldType; 
+                migrated = true;
+            }
+            if(!c.color) c.color = '#64748b';
+            if(!c.evalMethod) c.evalMethod = 'other';
+            if(!c.prereqIds) c.prereqIds = []; 
+            if(!c.coreqIds) c.coreqIds = [];
+            if(!c.concurrentOnlyIds) c.concurrentOnlyIds = [];
+            if(!c.components) c.components = [{type:'lecture',slots:[{sem:'',day:'',start:'',end:'',checked:false}]}];
+            c.components.forEach(comp=>{
+                if(comp.mustAttend===undefined) comp.mustAttend = false;
+                if(!comp.slots) comp.slots = [{sem:'', day: '', start: '', end: '', checked: false}];
+                comp.slots.forEach(s=>{ 
+                    if(s.checked===undefined) s.checked=false; 
+                    if(s.end===undefined) s.end=''; 
+                    if(s.sem===undefined) s.sem='';
+                });
+                const hadChecked = comp.slots.some(s=>s.checked);
+                autoCheckSingleOption(comp.slots);
+                if(!hadChecked && comp.slots.some(s=>s.checked)) migrated = true;
+            });
+        });
+        if(migrated) saveData(false);
+    } catch(e) { console.error("Migration error", e); }
+}
+
+function loadData(){
+  try{
+    const sc = localStorage.getItem('cp_courses_v18');
+    const ss = localStorage.getItem('cp_settings_v18');
+    courses = sc ? JSON.parse(sc) : JSON.parse(JSON.stringify(DEFAULT_COURSES));
+    settings = ss ? JSON.parse(ss) : JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+    if(!settings.blockStyle) settings.blockStyle = 'striped';
+    if(settings.highlightScheduleCollisions === undefined) settings.highlightScheduleCollisions = true;
+    if(!settings.compTypeLabels) settings.compTypeLabels = JSON.parse(JSON.stringify(DEFAULT_SETTINGS.compTypeLabels));
+    else ['lecture','tirgul','lab','other'].forEach(k=>{ if(!settings.compTypeLabels[k]) settings.compTypeLabels[k] = DEFAULT_SETTINGS.compTypeLabels[k]; });
+    if(!Array.isArray(courses)) courses = JSON.parse(JSON.stringify(DEFAULT_COURSES));
+    runMigrationScripts();
+  } catch(e){ 
+      courses=JSON.parse(JSON.stringify(DEFAULT_COURSES)); 
+      settings=JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); 
+  }
+}
+
+function pushHistory() {
+    if(historyStack.length > 10) historyStack.shift();
+    historyStack.push(JSON.parse(JSON.stringify(courses)));
+    const btn = document.getElementById('undo-btn');
+    if(btn) btn.classList.add('active');
+}
+function undo() {
+    if(historyStack.length > 0) {
+        courses = historyStack.pop();
+        if(historyStack.length === 0) {
+            const btn = document.getElementById('undo-btn');
+            if(btn) btn.classList.remove('active');
+        }
+        saveData(false); renderAll();
+    }
+}
+function saveData(push = true){
+  localStorage.setItem('cp_courses_v18', JSON.stringify(courses));
+  localStorage.setItem('cp_settings_v18', JSON.stringify(settings));
+  const s = document.getElementById('save-status');
+  if(s) { s.textContent = 'נשמר ✓'; setTimeout(()=>s.textContent='נשמר אוטומטית', 2000); }
+}
+function exportData(){
+  const blob = new Blob([JSON.stringify({courses,settings},null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = 'course_planner.json'; a.click();
+}
+function importData(e){
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try{
+      const d = JSON.parse(ev.target.result);
+      if(d.courses && Array.isArray(d.courses)) courses = d.courses;
+      if(d.settings) settings = d.settings;
+      pushHistory(); runMigrationScripts(); saveData(false); renderAll(); alert('יובא בהצלחה!');
+    } catch(err){ alert('שגיאה בקובץ'); }
+  };
+  reader.readAsText(file); e.target.value='';
+}
+
+// ===================== TABS & HELPERS =====================
+function showTab(t){
+  try {
+      const tabs = ['planner','schedule','add','summary','settings'];
+      tabs.forEach((id,i)=>{
+        const el = document.getElementById('tab-'+id);
+        const btn = document.querySelectorAll('.tab')[i];
+        if(el) el.classList.toggle('hidden',id!==t);
+        if(btn) btn.classList.toggle('active',id===t);
+      });
+      if(t==='schedule') renderSchedule();
+      if(t==='add'){ 
+          if(addCompCount===0) initAddComps(); 
+          renderManageList(); renderTypeSelect('f-type'); 
+          renderColorRow('add-color-row', addSelectedColor, 'add'); 
+          renderPrereqsUI('add', null, [], []);
+          renderTrackPoolPanel();
+      }
+      if(t==='summary') renderSummary();
+      if(t==='settings') renderSettings();
+  } catch(e) { console.error("Tab switch error", e); }
+}
+
+function getTypeMap(){
+  const map = {...TYPE_DEFAULTS};
+  (settings.categories||[]).forEach(cat=>{
+    if(!map[cat.type]) map[cat.type] = {label:cat.name, cls:'tag-general', color:'#64748b'};
+  });
+  return map;
+}
+
+function renderTypeSelect(selId){
+  const sel = document.getElementById(selId); if(!sel) return;
+  const cur = sel.value; sel.innerHTML = '';
+  Object.entries(getTypeMap()).forEach(([k,v])=>{
+    const o = document.createElement('option'); o.value=k; o.textContent=v.label;
+    sel.appendChild(o);
+  });
+  if(cur) sel.value = cur;
+}
+
+function toggleTrackTagsVisibility(mode) {
+    const typeSelect = document.getElementById(mode === 'add' ? 'f-type' : 'edit-type');
+    const container = document.getElementById(mode === 'add' ? 'add-track-container' : 'edit-track-container');
+    if(!typeSelect || !container) return;
+    if(typeSelect.value === 'elective') {
+        container.style.display = 'block';
+        if(mode==='add') renderTrackTagCheckboxes('f-tracktags','f-tracktag');
+        else renderTrackTagCheckboxes('edit-tracktags','e-tracktag');
+    } else {
+        container.style.display = 'none';
+    }
+}
+
+function renderTrackTagCheckboxes(containerId, checkboxClass){
+  const el = document.getElementById(containerId); if(!el) return;
+  el.innerHTML = TRACK_TAGS.map(tag=>{
+    return `<label><input type="checkbox" class="${checkboxClass}" value="${tag}"> ${TRACK_LABELS[tag]}</label>`;
+  }).join('');
+}
+
+// PREREQS UI
+function renderPrereqsUI(mode, courseId, preIds, coIds, concurrentOnlyIds) {
+    currentPrereqsList = (preIds || []).map(id => {
+        const c = courses.find(x => x.id === id);
+        const concurrent = (coIds || []).includes(id);
+        const before = !(concurrentOnlyIds || []).includes(id);
+        return { id: id, name: c ? c.name : 'לא ידוע', before: before, concurrent: concurrent };
+    }).filter(x => x.name !== 'לא ידוע');
+    document.getElementById(`${mode}-prereq-search`).value = '';
+    document.getElementById(`${mode}-prereq-dropdown`).style.display = 'none';
+    renderSelectedPrereqs(mode);
+}
+
+function handlePrereqSearch(mode) {
+   const term = document.getElementById(`${mode}-prereq-search`).value.toLowerCase();
+   const drop = document.getElementById(`${mode}-prereq-dropdown`);
+   const currentId = mode === 'edit' ? document.getElementById('edit-id').value : null;
+
+   if(!term) { drop.style.display = 'none'; return; }
+
+   const available = courses.filter(c => c.id !== currentId && !currentPrereqsList.some(p=>p.id===c.id) && c.name.toLowerCase().includes(term));
+
+   if(available.length === 0) {
+       drop.innerHTML = '<div class="prereq-dropdown-item">לא נמצאו קורסים...</div>';
+   } else {
+       drop.innerHTML = available.map(c => `<div class="prereq-dropdown-item" onclick="addPrereqToSelection('${c.id}', '${c.name.replace(/'/g,"\\'")}', '${mode}')">${c.name} (סמ' ${c.sem})</div>`).join('');
+   }
+   drop.style.display = 'block';
+}
+
+function addPrereqToSelection(id, name, mode) {
+   currentPrereqsList.push({ id: id, name: name, before: true, concurrent: false });
+   document.getElementById(`${mode}-prereq-search`).value = '';
+   document.getElementById(`${mode}-prereq-dropdown`).style.display = 'none';
+   renderSelectedPrereqs(mode);
+}
+
+function removePrereqFromSelection(id, mode) {
+   currentPrereqsList = currentPrereqsList.filter(p => p.id !== id);
+   renderSelectedPrereqs(mode);
+}
+
+// A relationship must always mean *something* — "before", "concurrent", or both — so
+// unchecking the last remaining option is blocked instead of leaving neither selected.
+function togglePrereqMode(id, field, checked, mode) {
+   const p = currentPrereqsList.find(x => x.id === id);
+   if(!p) return;
+   const other = field === 'before' ? 'concurrent' : 'before';
+   if(!checked && !p[other]) {
+       renderSelectedPrereqs(mode); // revert the checkbox visually — no state change
+       return;
+   }
+   p[field] = checked;
+}
+
+function renderSelectedPrereqs(mode) {
+   const container = document.getElementById(`${mode}-prereqs-container`);
+   if(currentPrereqsList.length === 0) {
+       container.innerHTML = '<span style="font-size:11px;color:var(--text-muted)">לא נבחרו קורסי קדם</span>';
+       return;
+   }
+   container.innerHTML = currentPrereqsList.map(p => `
+      <div class="sel-prereq-row">
+        <span style="font-weight:600; color:var(--text-main); font-size:13px;">${p.name}</span>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <label class="prereq-mode-chk"><input type="checkbox" onchange="togglePrereqMode('${p.id}','before',this.checked,'${mode}')" ${p.before ? 'checked' : ''}> לפני</label>
+          <label class="prereq-mode-chk"><input type="checkbox" onchange="togglePrereqMode('${p.id}','concurrent',this.checked,'${mode}')" ${p.concurrent ? 'checked' : ''}> במקביל</label>
+          <button type="button" onclick="removePrereqFromSelection('${p.id}', '${mode}')" style="background:none;border:none;color:var(--red-neon);cursor:pointer;font-size:14px;font-weight:bold;">✕</button>
+        </div>
+      </div>
+   `).join('');
+}
+
+function renderColorRow(rowId, selected, which){
+  const row = document.getElementById(rowId); if(!row) return;
+  row.innerHTML = '';
+  PALETTE.forEach(c=>{
+    const d = document.createElement('div');
+    d.className = 'color-opt' + (c===selected?' selected':'');
+    d.style.background = c; d.title = c;
+    d.onclick = () => {
+      row.querySelectorAll('.color-opt').forEach(el=>el.classList.remove('selected'));
+      d.classList.add('selected');
+      if(which==='add') addSelectedColor = c; else editSelectedColor = c;
+    };
+    row.appendChild(d);
+  });
+}
+function updateEditTypeColor(){ editSelectedColor = getTypeMap()[document.getElementById('edit-type').value]?.color || '#64748b'; renderColorRow('edit-color-row', editSelectedColor, 'edit'); }
+function updateAddTypeColor(){ addSelectedColor = getTypeMap()[document.getElementById('f-type').value]?.color || '#64748b'; renderColorRow('add-color-row', addSelectedColor, 'add'); }
+
+// A prerequisite relationship is always one of exactly three valid modes:
+// before-only (strict), concurrent-only (same semester exactly), or both (before-or-same).
+// "neither" can't be saved by the UI, but default safely to strict-before if ever missing.
+function getPrereqMode(course, preId){
+    const allowsConcurrent = (course.coreqIds||[]).includes(preId);
+    const allowsBefore = !(course.concurrentOnlyIds||[]).includes(preId);
+    return { allowsBefore, allowsConcurrent };
+}
+function prereqViolated(courseSem, preSem, allowsBefore, allowsConcurrent){
+    if(allowsBefore && allowsConcurrent) return courseSem < preSem;      // before or same semester
+    if(allowsBefore && !allowsConcurrent) return courseSem <= preSem;    // strictly before only
+    return courseSem !== preSem;                                        // concurrent only (exact same semester)
+}
+function prereqRelationLabel(allowsBefore, allowsConcurrent){
+    if(allowsBefore && allowsConcurrent) return 'לפניו או במקביל אליו';
+    if(allowsBefore && !allowsConcurrent) return 'בסמסטר שלפניו (לא באותו סמסטר)';
+    return 'באותו סמסטר בדיוק (לא לפני ולא אחרי)';
+}
+
+function checkPrerequisites(){
+  const errors = [];
+  courses.forEach(c => {
+    // התעלם מהתראות עבור קורס בחירה שעדיין לא שובץ למסלול (יושב במאגר)
+    const isCActive = c.type !== 'elective' || c.assignedTrack;
+    if (!isCActive) return;
+
+    if(!c.prereqIds) return;
+    c.prereqIds.forEach(preId => {
+        const preCourse = courses.find(x => x.id === preId);
+        if(!preCourse) return;
+        
+        // בדיקה האם קורס הקדם עצמו בכלל נבחר
+        const isPreActive = preCourse.type !== 'elective' || preCourse.assignedTrack;
+        if (!isPreActive) {
+            errors.push({id: c.id, preId: preId, msg: `"${c.name}" דורש את "${preCourse.name}", אך קורס הקדם טרם שובץ למסלול (נמצא במאגר).`});
+            return;
+        }
+
+        const { allowsBefore, allowsConcurrent } = getPrereqMode(c, preId);
+        const violated = prereqViolated(c.sem, preCourse.sem, allowsBefore, allowsConcurrent);
+        if(violated) {
+            const relation = prereqRelationLabel(allowsBefore, allowsConcurrent);
+            errors.push({id: c.id, preId: preId, msg: `"${c.name}" (סמ' ${c.sem}) דורש את "${preCourse.name}" ${relation} (שובץ בסמ' ${preCourse.sem}).`});
+        }
+    });
+  });
+  return errors;
+}
+
+function autoFixPrerequisites() {
+    pushHistory(); let madeChanges = false; let maxIterations = 10; 
+    while(checkPrerequisites().length > 0 && maxIterations > 0) {
+        let errors = checkPrerequisites();
+        let fixedInIteration = false;
+        errors.forEach(err => {
+            const course = courses.find(c => c.id === err.id);
+            const preCourse = courses.find(c => c.id === err.preId);
+            if(course && preCourse) {
+                const isPreActive = preCourse.type !== 'elective' || preCourse.assignedTrack;
+                if(!isPreActive) return; // לא ניתן לתקן אוטומטית אם קורס הקדם בכלל לא במערכת המתוכננת
+
+                const { allowsBefore, allowsConcurrent } = getPrereqMode(course, err.preId);
+                let validSemesters;
+                if(allowsBefore && allowsConcurrent) validSemesters = course.canMove.filter(s => s >= preCourse.sem);
+                else if(allowsBefore && !allowsConcurrent) validSemesters = course.canMove.filter(s => s > preCourse.sem);
+                else validSemesters = course.canMove.filter(s => s === preCourse.sem);
+                if(validSemesters.length > 0) { course.sem = Math.min(...validSemesters); madeChanges = true; fixedInIteration = true; }
+                else {
+                    let validPreSemesters;
+                    if(allowsBefore && allowsConcurrent) validPreSemesters = preCourse.canMove.filter(s => s <= course.sem);
+                    else if(allowsBefore && !allowsConcurrent) validPreSemesters = preCourse.canMove.filter(s => s < course.sem);
+                    else validPreSemesters = preCourse.canMove.filter(s => s === course.sem);
+                    if(validPreSemesters.length > 0) { preCourse.sem = Math.max(...validPreSemesters); madeChanges = true; fixedInIteration = true; }
+                }
+            }
+        });
+        if(!fixedInIteration) break;
+        maxIterations--;
+    }
+    if(madeChanges) { saveData(false); renderPlanner(); }
+    else alert("יש שגיאות שאינן ניתנות לתיקון אוטומטי (ייתכן שאחד מקורסי הקדם חסר במערכת).");
+}
+
+function updateSlotSems(mode) {
+    const checkClass = mode === 'edit' ? '.edit-sem-check:checked' : '.sem-check:checked';
+    const selectQuery = mode === 'edit' ? '#edit-components .slot-sem' : '#add-components .slot-sem';
+    const checks = Array.from(document.querySelectorAll(checkClass)).map(el=>el.value);
+    document.querySelectorAll(selectQuery).forEach(sel => {
+        const val = sel.value;
+        sel.innerHTML = '<option value="">הכל</option>' + checks.map(s => `<option value="${s}">${s}</option>`).join('');
+        if(checks.includes(val)) sel.value = val;
+    });
+}
+function getSemOptionsHTML(mode, selectedVal) {
+    const checkClass = mode === 'edit' ? '.edit-sem-check:checked' : '.sem-check:checked';
+    const checks = Array.from(document.querySelectorAll(checkClass)).map(el=>el.value);
+    return '<option value="">הכל</option>' + checks.map(s => `<option value="${s}" ${selectedVal===s?'selected':''}>${s}</option>`).join('');
+}
+
+// ===================== PLANNER =====================
+function handleSearch() {
+    searchQuery = document.getElementById('course-search').value.toLowerCase().trim();
+    document.querySelectorAll('.course-card').forEach(card => {
+        const name = card.querySelector('.c-name').textContent.toLowerCase();
+        if(searchQuery === '' || name.includes(searchQuery)) card.classList.remove('search-hidden');
+        else card.classList.add('search-hidden');
+    });
+}
+
+function renderLegend(){
+  const leg = document.getElementById('legend'); if(!leg) return;
+  leg.innerHTML = Object.entries(getTypeMap()).map(([k,v])=>`<div class="leg"><div class="leg-dot" style="background:${v.color}"></div>${v.label}</div>`).join('');
+}
+
+function renderTrackBar(){
+  const tb = document.getElementById('track-bar'); if(!tb) return;
+  let html = '';
+  
+  // 1. ציור מלבני המסלולים (למ"מ, חק"ב וכו')
+  Object.entries(settings.tracks||{}).forEach(([key,tr])=>{
+    let core=0, elec=0;
+    courses.forEach(c=>{ 
+      let val = (tr.reqType === 'nz') ? c.nz : 1;
+      if(c.type === 'elective' && c.assignedTrack === key+'-core') core += val; 
+      if(c.type === 'elective' && c.assignedTrack === key+'-elec') elec += val; 
+    });
+    const cOk = core >= tr.coreMin, eOk = elec >= tr.elecMin;
+    const label = tr.reqType === 'nz' ? 'נ"ז' : 'ק\'';
+    html += `<div class="track-card"><div class="track-name">${tr.name}</div>
+      <div class="track-vals"><span class="${cOk?'tok':'terr'}">חובה: ${core}/${tr.coreMin} ${label}</span>
+      <span class="${eOk?'tok':'terr'}">בחירה: ${elec}/${tr.elecMin} ${label}</span></div></div>`;
+  });
+
+  // 2. ציור מלבני הקטגוריות המיוחדות (יהדות, כללי וכו')
+  (settings.categories||[]).forEach(cat=>{
+    let current = 0;
+    courses.forEach(c => {
+        if(c.type === cat.type) {
+            current += (cat.reqType === 'nz') ? c.nz : 1;
+        }
+    });
+    const req = cat.required || 0;
+    const total = current + (cat.done || 0);
+    if(req === 0 && total === 0) return; // לא נציג מלבן אם לא הוגדרה דרישה ואין קורסים
+    
+    const isOk = req === 0 || total >= req;
+    const label = cat.reqType === 'nz' ? 'נ"ז' : 'ק\'';
+    
+    html += `<div class="track-card"><div class="track-name">${cat.name}</div>
+      <div class="track-vals"><span class="${isOk?'tok':'terr'}">${total}/${req} ${label}</span>
+      ${cat.done > 0 ? `<span class="tneutral" style="font-size:10px">(מתוכם ${cat.done} פטורים)</span>` : ''}</div></div>`;
+  });
+
+  // 3. ציור מלבן סך כל הנ"ז לתואר - כולל פירוט של מקורות הדרישה (תואר בסיסי + כל קטגוריה)
+  const plannedCourses = courses.filter(c => c.type !== 'elective' || c.assignedTrack);
+  const totalNzPlan = plannedCourses.reduce((sum,c)=>sum+c.nz,0);
+  const categoryDoneCredit = (settings.categories||[]).reduce((sum,cat)=>sum+(cat.done||0), 0);
+  const totalNzDone = totalNzPlan + (settings.priorNz||0) + categoryDoneCredit;
+  const baseReq = settings.targetTotalNz||175.5;
+  const baseLabel = settings.targetTotalNzLabel || 'תואר';
+  const categoryParts = (settings.categories||[]).filter(cat=>(cat.required||0) > 0);
+  const totalNzReq = baseReq + categoryParts.reduce((sum,cat)=>sum+(cat.required||0), 0);
+  const breakdownParts = [`${baseReq} ${baseLabel}`, ...categoryParts.map(cat=>`${cat.required} ${cat.name}`)];
+  html += `<div class="track-card"><div class="track-name">סה"כ נ"ז מתוכנן</div>
+    <div class="track-vals"><span class="${totalNzDone>=totalNzReq?'tok':'terr'}">${totalNzDone}/${totalNzReq}</span></div>
+    ${breakdownParts.length>1 ? `<div style="font-size:10px;color:var(--text-muted);margin-top:2px">(${breakdownParts.join(' + ')})</div>` : ''}
+  </div>`;
+
+  tb.innerHTML = html;
+}
+
+function renderPlanner(){
+  renderLegend(); renderTrackBar();
+  const errors = checkPrerequisites(); const errorIds = new Set(errors.map(e=>e.id));
+  const errList = document.getElementById('error-list');
+  if(errList) {
+      if(errors.length > 0) {
+          let eHtml = `<div class="error-box" style="margin-bottom:15px;"><span style="font-weight:700;">⚠️ חריגה מדרישות קדם</span><button class="btn-fix" onclick="autoFixPrerequisites()">תקן אוטומטית 🪄</button></div>`;
+          eHtml += errors.map(e=>`<div class="error-box">${e.msg}</div>`).join('');
+          errList.innerHTML = eHtml;
+      } else errList.innerHTML = '';
+  }
+
+  const grid = document.getElementById('sem-grid'); if(!grid) return;
+  grid.innerHTML = '';
+  [5,6,7,8].forEach(sem=>{
+    const sc = courses.filter(c=>c.sem===sem);
+    const plannedSc = sc.filter(c => c.type !== 'elective' || c.assignedTrack);
+    const totalNz = plannedSc.reduce((s,c)=>s+c.nz,0);
+    const div = document.createElement('div'); div.className='semester';
+    div.innerHTML=`<div class="sem-head"><span class="sem-title">סמסטר ${sem}</span>
+      <div class="sem-stats"><div>${plannedSc.length} קורסים מתוכננים</div><div class="sem-nz">${totalNz.toFixed(1)} נ"ז</div></div>
+    </div><div class="drop-zone" data-sem="${sem}"></div>`;
+    grid.appendChild(div);
+    const zone = div.querySelector('.drop-zone');
+    sc.forEach(c => {
+        if(c.type === 'elective' && !c.assignedTrack) return;
+        zone.appendChild(makeCard(c, errorIds.has(c.id)))
+    });
+    setupDrop(zone, sem);
+  });
+  if(searchQuery) handleSearch();
+}
+
+function isCourseDone(c){
+  if(!c.components || c.components.length===0) return false;
+  return c.components.every(comp=> comp.slots && comp.slots.some(s=>s.checked));
+}
+
+function getSlotForSem(comp, sem){
+  const relevant = (comp.slots||[]).filter(s=>s.day!=='' && s.start!=='' && (!s.sem || s.sem===String(sem)));
+  if(relevant.length===0) return null;
+  return relevant.find(s=>s.checked) || relevant[0];
+}
+
+function altSemPreviewHTML(course){
+  if(!course.canMove || course.canMove.length<2) return '';
+  const alts = course.canMove.filter(s=>s!==course.sem);
+  if(alts.length===0) return '';
+  const parts = alts.map(sem=>{
+    const compTexts = (course.components||[]).map(comp=>{
+      const slot = getSlotForSem(comp, sem);
+      if(!slot) return null;
+      return `${typeLabelOf(comp.type)} ${DAYS[slot.day]} ${slot.start}-${slot.end}`;
+    }).filter(Boolean);
+    const body = compTexts.length ? compTexts.join(' · ') : 'אין נתוני שעות עבור סמסטר זה';
+    return `<div class="c-alt-sem-item"><b>גם בסמ' ${sem}:</b> ${body}</div>`;
+  }).join('');
+  return `<div class="c-alt-sem">${parts}</div>`;
+}
+
+function makeCard(course, hasError){
+  const div = document.createElement('div');
+  const movable = !course.fixed && course.canMove && course.canMove.length>1;
+  const done = isCourseDone(course);
+  div.className = `course-card ${movable?'movable':''}${hasError?' error':''}${done?' done':''}`;
+  div.draggable = movable; div.dataset.id = course.id;
+  
+  const tag = getTypeMap()[course.type] || {label:'לא מוגדר', cls:'tag-general', color:'#94a3b8'};
+  const hint = movable ? `<div class="c-hint">ניתן לגרירה ל: ${course.canMove.join('/')}</div>` : '';
+  const altPreview = altSemPreviewHTML(course);
+  const prereq = (course.prereqIds && course.prereqIds.length) ? `<span class="prereq-icon">🔗</span>` : '';
+  let badge = '';
+  if(course.type === 'elective' && course.assignedTrack) badge = ` <span style="font-size:9px; background:var(--primary); color:#fff; padding:1px 4px; border-radius:4px; margin-right:4px;">${TRACK_LABELS[course.assignedTrack]}</span>`;
+
+  div.innerHTML=`
+    <div class="c-dot" style="background:${course.color||tag.color}; box-shadow: 0 0 10px ${course.color||tag.color}"></div>
+    <div class="c-name">${done?'✓ ':''}${course.name} ${prereq}${hint}${altPreview}</div>
+    <div class="c-right">
+      ${course.fixed?`<span class="lock">🔒 נעול</span>`:''}
+      <div><span class="c-tag ${tag.cls}">${tag.label}</span>${badge}</div>
+      <span class="c-nz">${course.nz} נ"ז</span>
+      <button class="edit-btn" onclick="openEdit('${course.id}')">עריכה</button>
+    </div>`;
+  if(movable){
+    div.addEventListener('dragstart',()=>{dragId=course.id;setTimeout(()=>div.classList.add('dragging'),0);});
+    div.addEventListener('dragend',()=>{div.classList.remove('dragging');dragId=null;document.querySelectorAll('.semester').forEach(el=>el.classList.remove('drag-over'));});
+  }
+  return div;
+}
+
+function setupDrop(zone, sem){
+  zone.addEventListener('dragover', e => { e.preventDefault(); zone.closest('.semester').classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => { zone.closest('.semester').classList.remove('drag-over'); });
+  zone.addEventListener('drop', e => {
+    e.preventDefault(); zone.closest('.semester').classList.remove('drag-over');
+    if(!dragId) return;
+    const c = courses.find(x=>x.id===dragId);
+    if(c && c.canMove && c.canMove.includes(sem)){ pushHistory(); c.sem=sem; saveData(false); renderPlanner(); }
+  });
+}
+
+// ===================== EDIT MODAL =====================
+function openEdit(id){
+  const c = courses.find(x=>x.id===id); if(!c) return;
+  renderTypeSelect('edit-type');
+  renderPrereqsUI('edit', id, c.prereqIds || [], c.coreqIds || [], c.concurrentOnlyIds || []);
+
+  document.getElementById('modal-title').textContent = 'עריכת קורס: '+c.name;
+  document.getElementById('edit-id').value = id;
+  document.getElementById('edit-name').value = c.name;
+  document.getElementById('edit-nz').value = c.nz;
+  document.getElementById('edit-eval-method').value = c.evalMethod || 'other';
+  if(getTypeMap()[c.type]) document.getElementById('edit-type').value = c.type;
+  
+  toggleTrackTagsVisibility('edit');
+  if(c.type === 'elective') document.querySelectorAll('.e-tracktag').forEach(el=>{ el.checked=(c.trackTags||[]).includes(el.value); });
+
+  document.getElementById('edit-fixed').value = c.fixed ? (c.sem||'') : '';
+  document.querySelectorAll('.edit-sem-check').forEach(el=>{ el.checked=(c.canMove||[]).includes(parseInt(el.value)); });
+  
+  editSelectedColor = c.color || '#3b82f6'; renderColorRow('edit-color-row', editSelectedColor, 'edit');
+  editCompCount = 0; document.getElementById('edit-components').innerHTML = '';
+  (c.components||[]).forEach(comp=>addEditComp(comp));
+  updateSlotSems('edit');
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+function closeModal(){ document.getElementById('modal-overlay').classList.add('hidden'); }
+
+function addEditComp(comp){
+  const idx = editCompCount++;
+  const container = document.getElementById('edit-components');
+  const div = document.createElement('div'); div.className='comp-item'; div.id=`ecomp-${idx}`;
+  const slots = comp?.slots||[{sem:'',day:'',start:'',end:'',checked:false}];
+  div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <span style="font-size:12px;font-weight:600;color:var(--text-main)">רכיב ${idx+1}</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);font-weight:400;text-transform:none;cursor:pointer;" title="רכיב רשות לא ידרוש בחירת שעה, ולא יסומן כ'נשכח' בסיכום">
+          <input type="checkbox" id="ecomp-optional-${idx}" ${comp?.optional?'checked':''}> רשות (לא חובה)
+        </label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);font-weight:400;text-transform:none;cursor:pointer;" title="מסמן שהנוכחות ברכיב הזה חובה בפועל — כדי לדעת אילו שעות/ימים באמת תפוסים ואי-אפשר לעבוד בהם">
+          <input type="checkbox" id="ecomp-mustattend-${idx}" ${comp?.mustAttend?'checked':''}> 🎯 נוכחות חובה
+        </label>
+        ${idx>0?`<button class="remove-comp-btn" onclick="document.getElementById('ecomp-${idx}').remove()">✕</button>`:''}
+      </div>
+    </div>
+    <div class="comp-row"><label>סוג:</label>
+      <select id="ecomp-type-${idx}">
+        ${compTypeOptionsHTML(comp?.type||'lecture')}
+      </select>
+    </div><div id="ecomp-slots-${idx}"></div>
+    <button class="add-slot-btn" onclick="addSlotRow(document.getElementById('ecomp-slots-${idx}'), {sem:'',day:'',start:'',end:'',checked:false}, 'edit')">+ אופציה נוספת</button>`;
+  container.appendChild(div);
+  slots.forEach(slot => addSlotRow(document.getElementById(`ecomp-slots-${idx}`), slot, 'edit'));
+}
+
+function addSlotRow(container, slot, mode){
+  const sd = document.createElement('div'); sd.className = 'comp-row'; sd.style.marginTop='5px';
+  const semOptions = getSemOptionsHTML(mode, slot?.sem);
+  sd.innerHTML = `
+    <label>סמ':</label><select class="slot-sem" style="width:65px">${semOptions}</select>
+    <label>יום:</label><select class="slot-day" style="width:70px"><option value="">--</option>${DAYS.map((d,i)=>`<option value="${i}" ${slot?.day===String(i)?'selected':''}>${d}</option>`).join('')}</select>
+    <label>מ:</label><select class="slot-start" style="width:65px"><option value="">--</option>${HOURS.slice(0,-1).map(h=>`<option value="${h}" ${slot?.start===h?'selected':''}>${h}</option>`).join('')}</select>
+    <label>עד:</label><select class="slot-end" style="width:65px"><option value="">--</option>${HOURS.slice(1).map(h=>`<option value="${h}" ${slot?.end===h?'selected':''}>${h}</option>`).join('')}</select>
+    <button class="remove-comp-btn" onclick="this.closest('.comp-row').remove()">✕</button>`;
+  container.appendChild(sd);
+}
+
+// If a component ends up with exactly one real (day+start filled in) option and nothing
+// is checked yet, select it automatically — there's nothing to actually choose between.
+function autoCheckSingleOption(slots){
+  if(slots.some(s=>s.checked)) return slots; // something's already chosen, leave it alone
+  const real = slots.filter(s=>s.day!=='' && s.start!=='');
+  if(real.length===1) real[0].checked = true;
+  return slots;
+}
+
+function saveEdit(){
+  const id = document.getElementById('edit-id').value; const c = courses.find(x=>x.id===id); if(!c) return;
+  const name = document.getElementById('edit-name').value.trim(); if(!name) return alert('נא להזין שם');
+  const checks = Array.from(document.querySelectorAll('.edit-sem-check:checked')).map(el=>parseInt(el.value));
+  if(checks.length===0) return alert('נא לבחור סמסטר אליו הקורס יכול להיגרר');
+  
+  const oldComponents = JSON.parse(JSON.stringify(c.components||[]));
+  const components = [];
+  document.querySelectorAll('#edit-components .comp-item').forEach(el=>{
+    const idx = el.id.split('-')[1]; const t = document.getElementById(`ecomp-type-${idx}`); if(!t) return;
+    const oldSlotsPool = (oldComponents[idx] && oldComponents[idx].slots) ? [...oldComponents[idx].slots] : [];
+    const slots = [];
+    el.querySelectorAll('.slot-day').forEach((dayEl,si)=>{
+      const semEl = el.querySelectorAll('.slot-sem')[si]; const hourEl = el.querySelectorAll('.slot-start')[si]; const endEl = el.querySelectorAll('.slot-end')[si];
+      const semVal = semEl?semEl.value:''; const dayVal = dayEl.value; const startVal = hourEl?hourEl.value:''; const endVal = endEl?endEl.value:'';
+      const matchIdx = oldSlotsPool.findIndex(s=> s.day===dayVal && s.start===startVal && s.end===endVal && (s.sem||'')===semVal);
+      let checked = false;
+      if(matchIdx>-1){ checked = !!oldSlotsPool[matchIdx].checked; oldSlotsPool.splice(matchIdx,1); }
+      slots.push({sem:semVal, day:dayVal, start:startVal, end:endVal, checked});
+    });
+    components.push({type:t.value, optional: !!document.getElementById(`ecomp-optional-${idx}`)?.checked, mustAttend: !!document.getElementById(`ecomp-mustattend-${idx}`)?.checked, slots: autoCheckSingleOption(slots.length>0?slots:[{sem:'',day:'',start:'',end:'',checked:false}])});
+  });
+  
+  pushHistory();
+  c.name=name; c.nz=parseFloat(document.getElementById('edit-nz').value)||3; c.type=document.getElementById('edit-type').value; c.color=editSelectedColor;
+  c.evalMethod = document.getElementById('edit-eval-method').value || 'other';
+  c.fixed = document.getElementById('edit-fixed').value!==''; c.canMove=checks;
+  
+  c.prereqIds = currentPrereqsList.map(p => p.id);
+  c.coreqIds = currentPrereqsList.filter(p => p.concurrent).map(p => p.id);
+  c.concurrentOnlyIds = currentPrereqsList.filter(p => !p.before).map(p => p.id);
+  
+  if(c.type === 'elective') {
+    c.trackTags = Array.from(document.querySelectorAll('.e-tracktag:checked')).map(el=>el.value);
+    if(c.assignedTrack && !c.trackTags.includes(c.assignedTrack)) c.assignedTrack = null;
+  }
+  else { c.trackTags = []; c.assignedTrack = null; }
+  
+  const fixedVal = document.getElementById('edit-fixed').value;
+  if(fixedVal!=='') c.sem=parseInt(fixedVal); else if(!checks.includes(c.sem)) c.sem=checks[0];
+  c.components = components;
+  
+  saveData(false); renderAll(); closeModal();
+}
+
+function deleteFromModal(){
+  if(!confirm('למחוק את הקורס?')) return;
+  pushHistory(); const id = document.getElementById('edit-id').value;
+  courses = courses.filter(c=>c.id!==id);
+  courses.forEach(c=>{ if(c.prereqIds) c.prereqIds = c.prereqIds.filter(pid=>pid!==id); if(c.coreqIds) c.coreqIds = c.coreqIds.filter(pid=>pid!==id); });
+  saveData(false); renderAll(); closeModal();
+}
+
+// ===================== ADD TAB & POOL =====================
+function openAddModal() {
+    initAddComps();
+    renderTypeSelect('f-type');
+    toggleTrackTagsVisibility('add');
+    updateAddTypeColor();
+    renderPrereqsUI('add', null, [], []);
+    document.getElementById('add-modal-overlay').classList.remove('hidden');
+}
+function closeAddModal() { document.getElementById('add-modal-overlay').classList.add('hidden'); }
+
+function initAddComps(){ addCompCount=0; document.getElementById('add-components').innerHTML=''; addAddComp(); updateSlotSems('add'); }
+function addAddComp(){
+  const idx = addCompCount++; const container = document.getElementById('add-components');
+  const div = document.createElement('div'); div.className='comp-item'; div.id=`acomp-${idx}`;
+  div.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <span style="font-size:12px;font-weight:600">רכיב ${idx+1}</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);font-weight:400;text-transform:none;cursor:pointer;" title="רכיב רשות לא ידרוש בחירת שעה, ולא יסומן כ'נשכח' בסיכום">
+          <input type="checkbox" id="acomp-optional-${idx}"> רשות (לא חובה)
+        </label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-muted);font-weight:400;text-transform:none;cursor:pointer;" title="מסמן שהנוכחות ברכיב הזה חובה בפועל — כדי לדעת אילו שעות/ימים באמת תפוסים ואי-אפשר לעבוד בהם">
+          <input type="checkbox" id="acomp-mustattend-${idx}"> 🎯 נוכחות חובה
+        </label>
+        ${idx>0?`<button class="remove-comp-btn" onclick="document.getElementById('acomp-${idx}').remove()">✕</button>`:''}
+      </div>
+    </div>
+    <div class="comp-row"><label>סוג:</label><select id="acomp-type-${idx}">${compTypeOptionsHTML('lecture')}</select></div>
+    <div id="acomp-slots-${idx}"></div><button class="add-slot-btn" onclick="addSlotRow(document.getElementById('acomp-slots-${idx}'), {sem:'',day:'',start:'',end:'',checked:false}, 'add')">+ אופציה שעות נוספת</button>`;
+  container.appendChild(div); addSlotRow(document.getElementById(`acomp-slots-${idx}`), {sem:'',day:'',start:'',end:'',checked:false}, 'add');
+}
+
+function addCourse(){
+  const name = document.getElementById('f-name').value.trim(); if(!name) return alert('נא להזין שם');
+  const checks = Array.from(document.querySelectorAll('.sem-check:checked')).map(el=>parseInt(el.value));
+  if(checks.length===0) return alert('נא לבחור סמסטר אליו הקורס יכול להיכנס');
+  
+  const components = [];
+  document.querySelectorAll('#add-components .comp-item').forEach(el=>{
+    const idx = el.id.split('-')[1]; const t = document.getElementById(`acomp-type-${idx}`);
+    const slots = [];
+    el.querySelectorAll('.slot-day').forEach((dayEl,si)=>{
+      const semEl = el.querySelectorAll('.slot-sem')[si]; const hourEl = el.querySelectorAll('.slot-start')[si]; const endEl = el.querySelectorAll('.slot-end')[si];
+      slots.push({sem:semEl?semEl.value:'', day:dayEl.value, start:hourEl?hourEl.value:'', end:endEl?endEl.value:'', checked:false});
+    });
+    if(t) components.push({type:t.value, optional: !!document.getElementById(`acomp-optional-${idx}`)?.checked, mustAttend: !!document.getElementById(`acomp-mustattend-${idx}`)?.checked, slots: autoCheckSingleOption(slots.length>0?slots:[{sem:'',day:'',start:'',end:'',checked:false}])});
+  });
+  
+  const type = document.getElementById('f-type').value;
+  pushHistory();
+  courses.push({
+    id:'custom_'+Date.now(), name, type, nz:parseFloat(document.getElementById('f-nz').value)||3, color:addSelectedColor,
+    evalMethod: document.getElementById('f-eval-method').value || 'other',
+    fixed:document.getElementById('f-fixed').value!=='', sem:document.getElementById('f-fixed').value!==''?parseInt(document.getElementById('f-fixed').value):checks[0],
+    canMove:checks, 
+    prereqIds: currentPrereqsList.map(p => p.id), 
+    coreqIds: currentPrereqsList.filter(p => p.concurrent).map(p => p.id),
+    concurrentOnlyIds: currentPrereqsList.filter(p => !p.before).map(p => p.id),
+    components, trackTags: type==='elective'?Array.from(document.querySelectorAll('.f-tracktag:checked')).map(el=>el.value):[], assignedTrack: null
+  });
+  saveData(false); renderAll(); closeAddModal();
+  document.getElementById('f-name').value=''; 
+  const sMsg = document.getElementById('success-msg'); sMsg.classList.remove('hidden'); setTimeout(()=>sMsg.classList.add('hidden'), 3000);
+}
+
+function renderManageList(){
+  const el = document.getElementById('manage-list-content'); if(!el) return;
+  let html = '';
+  [5,6,7,8].forEach(sem=>{
+    const sc = courses.filter(c=>c.sem===sem); if(sc.length===0) return;
+    html += `<div class="section-label">סמסטר ${sem}</div>` + sc.map(c=>`<div class="manage-row">
+      <span style="display:flex;align-items:center;gap:8px"><span style="width:10px;height:10px;border-radius:50%;background:${c.color}"></span>${c.name}</span>
+      <div style="display:flex; gap:8px"><button class="edit-btn" onclick="openEdit('${c.id}')">עריכה</button>
+      <button class="edit-btn" style="color:var(--red-neon);border-color:var(--red-neon)" onclick="deleteCourse('${c.id}')">מחק</button></div></div>`).join('');
+  });
+  el.innerHTML = html || '<p>אין קורסים במערכת</p>';
+}
+function deleteCourse(id){
+  if(!confirm('מחק?')) return; pushHistory();
+  courses = courses.filter(c=>c.id!==id); courses.forEach(c=>{ if(c.prereqIds) c.prereqIds = c.prereqIds.filter(pid=>pid!==id); if(c.coreqIds) c.coreqIds = c.coreqIds.filter(pid=>pid!==id); });
+  saveData(false); renderAll();
+}
+
+// Drag & Drop Track Pool
+function evalMethodInfo(m){
+    if(m==='exam') return {label:'מבחן', icon:'📝', color:'#f59e0b'};
+    if(m==='assignment') return {label:'עבודה', icon:'📄', color:'#8b5cf6'};
+    return {label:'אחר', icon:'🔹', color:'#94a3b8'};
+}
+function evalMethodBadgeHtml(m){
+    const info = evalMethodInfo(m);
+    return `<span style="font-size:9px;background:${info.color}15;color:${info.color};border:1px solid ${info.color}40;padding:1px 5px;border-radius:4px;white-space:nowrap;">${info.icon} ${info.label}</span>`;
+}
+function renderTrackPoolPanel() {
+    const grid = document.getElementById('track-pool-body'); if(!grid) return;
+    renderElectiveNzPreview();
+    const electives = courses.filter(c => c.type === 'elective');
+    const unassigned = electives.filter(c => !c.assignedTrack);
+    
+    let poolHtml = `<div class="pool-zone" id="pool-zone-unassigned" ondragover="allowDropPool(event)" ondragleave="leaveDropPool(event)" ondrop="dropPool(event, 'pool')">
+        <h4 style="color:var(--text-main); margin-bottom:10px;">מאגר בחירה חופשי (${unassigned.length})</h4>
+        <div style="font-size:11px; color:var(--text-muted); margin-bottom:10px;">גרור קורסים מכאן לתוך בלוק המסלול המתאים מימין, או השתמש בכפתורים. רק קורסים ששובצו יופיעו במערכת השעות וייספרו למטה.</div>`;
+    
+    unassigned.forEach(c => {
+        let tagsHtml = '';
+        let actionsHtml = '';
+        if(c.trackTags && c.trackTags.length > 0) {
+            tagsHtml = `<div class="pool-course-tags">` + c.trackTags.map(tag => {
+                const prefix = tag.split('-')[0];
+                const isCore = tag.endsWith('-core');
+                const tColor = TRACK_COLORS[prefix] ? (isCore ? TRACK_COLORS[prefix].core : TRACK_COLORS[prefix].elec) : '#94a3b8';
+                return `<span style="font-size:9px; background:${tColor}15; color:${tColor}; border:1px solid ${tColor}40; padding:2px 6px; border-radius:4px;">${TRACK_LABELS[tag]}</span>`;
+            }).join('') + `</div>`;
+            actionsHtml = `<div class="pool-course-actions">` + c.trackTags.map(tag =>
+                `<button class="pool-assign-btn" onclick="setPoolAssignment('${c.id}','${tag}')">✓ שבץ ל${TRACK_LABELS[tag]}</button>`
+            ).join('') + `</div>`;
+        }
+        
+        poolHtml += `<div class="pool-course-item" draggable="true" ondragstart="dragPool(event, '${c.id}')">
+            <div class="pool-course-top">
+                <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${c.color}"></span>${c.name}</span>
+                <span style="display:flex;align-items:center;gap:5px"><span style="font-size:10px;color:var(--text-muted)">(${c.nz} נ"ז)</span>${evalMethodBadgeHtml(c.evalMethod)}</span>
+            </div>
+            ${tagsHtml}
+            ${actionsHtml}
+        </div>`;
+    });
+    poolHtml += `</div>`;
+
+    let tracksHtml = `<div class="pool-assigned-tracks">`;
+    Object.keys(settings.tracks || {}).forEach(tKey => {
+        const trackColor = TRACK_COLORS[tKey] ? TRACK_COLORS[tKey].core : 'var(--border)';
+        ['core', 'elec'].forEach(type => {
+            const tag = `${tKey}-${type}`;
+            const assigned = electives.filter(c => c.assignedTrack === tag);
+            tracksHtml += `<div class="track-block" style="border-top: 4px solid ${trackColor};" id="track-zone-${tag}" ondragover="allowDropPool(event)" ondragleave="leaveDropPool(event)" ondrop="dropPool(event, '${tag}')">
+                <h4>${TRACK_LABELS[tag]} (${assigned.length})</h4>
+                ${assigned.map(c => {
+                    const otherTags = (c.trackTags||[]).filter(t=>t!==tag);
+                    const moveButtons = otherTags.map(t=>`<button class="pool-move-btn" onclick="setPoolAssignment('${c.id}','${t}')">→ ${TRACK_LABELS[t]}</button>`).join('');
+                    return `
+                <div class="pool-course-item" draggable="true" ondragstart="dragPool(event, '${c.id}')" style="background:var(--surface);">
+                    <div class="pool-course-top">
+                        <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${c.color}"></span>${c.name}</span>
+                        <span style="display:flex;align-items:center;gap:5px"><span style="font-size:10px;color:var(--text-muted)">(${c.nz} נ"ז)</span>${evalMethodBadgeHtml(c.evalMethod)}</span>
+                    </div>
+                    <div class="pool-course-actions">
+                        <button class="pool-return-btn" onclick="setPoolAssignment('${c.id}','pool')">↩ למאגר</button>
+                        ${moveButtons}
+                    </div>
+                </div>`;}).join('')}
+            </div>`;
+        });
+    });
+    tracksHtml += `</div>`;
+    grid.innerHTML = poolHtml + tracksHtml;
+}
+function dragPool(ev, id) { ev.dataTransfer.setData('text/plain', id); }
+function allowDropPool(ev) { ev.preventDefault(); ev.currentTarget.classList.add('drag-over'); }
+function leaveDropPool(ev) { ev.currentTarget.classList.remove('drag-over'); }
+
+// Shared assignment logic used by both drag-and-drop and the click buttons —
+// keeps the two interaction styles perfectly in sync (same validation, same result).
+function setPoolAssignment(courseId, targetTrack){
+    const c = courses.find(x=>x.id===courseId); if(!c) return;
+    if(targetTrack === 'pool') {
+        c.assignedTrack = null;
+        c.color = TYPE_DEFAULTS['elective'].color;
+    } else {
+        if((c.trackTags||[]).includes(targetTrack)) {
+            c.assignedTrack = targetTrack;
+            const parts = targetTrack.split('-');
+            if(TRACK_COLORS[parts[0]]) {
+                c.color = parts[1] === 'core' ? TRACK_COLORS[parts[0]].core : TRACK_COLORS[parts[0]].elec;
+            }
+        } else {
+            alert('הקורס לא מוגדר כמתאים למסלול זה (אפשר לשנות בעריכת הקורס).');
+            return;
+        }
+    }
+    pushHistory(); saveData(false); renderAll();
+}
+
+function dropPool(ev, targetTrack) {
+    ev.preventDefault(); ev.currentTarget.classList.remove('drag-over');
+    const id = ev.dataTransfer.getData('text/plain');
+    setPoolAssignment(id, targetTrack);
+}
+
+// ===================== ELECTIVE NZ RECOMMENDATION ENGINE =====================
+// Works only within the unassigned pool (courses already dragged/clicked into a track
+// block are never touched) and always keeps the hard requirement intact: every track's
+// core/elective minimums stay filled, using distinct courses. Within that hard constraint,
+// it picks which pool candidates to use so the *total* nz across all elective courses
+// (already-assigned + newly-assigned) lands as close as possible to the requested target —
+// or, in "minimum" mode, simply as low as possible.
+function computeElectiveNzPlan(targetNz, minimize){
+    // The FULL requirement per tag (not just the current gap) — because we're now allowed
+    // to reshuffle freely between courses that are already placed and courses still sitting
+    // in the free pool, "how many are still missing" isn't the right frame anymore; we need
+    // to re-decide the whole assignment from scratch to find real swaps (move an already-placed
+    // small course to where it's actually needed more, freeing its old spot for something
+    // even smaller from the pool, etc.)
+    const fullNeed = {};
+    Object.entries(settings.tracks||{}).forEach(([key,tr])=>{
+        fullNeed[key+'-core'] = tr.coreMin||0;
+        fullNeed[key+'-elec'] = tr.elecMin||0;
+    });
+    let slotUnits = [];
+    TRACK_TAGS.forEach(tag=>{ for(let i=0;i<(fullNeed[tag]||0);i++) slotUnits.push({tag}); });
+
+    // universe: every elective-type course, whether already sitting in a track block or
+    // still free in the pool — all of them are fair game to move.
+    const candidates = courses.filter(c=>c.type==='elective').map(c=>({
+        id:c.id, name:c.name, nz:c.nz, currentTag: c.assignedTrack || null,
+        eligible: (c.trackTags||[]).filter(t=>TRACK_TAGS.includes(t))
+    })).filter(c=>c.eligible.length>0);
+
+    // bounded backtracking search: tries every legal combination (most-constrained slots
+    // first, for fast pruning and so scarce courses go where they're actually needed),
+    // always preferring maximum slot coverage first, then — among combinations that cover
+    // the same number of slots — the one closest to the nz target (or cheapest, in minimize
+    // mode). Because the candidate pool here includes already-placed courses too, this search
+    // naturally discovers multi-way swaps, not just single fills.
+    const tagCandidates = {};
+    TRACK_TAGS.forEach(tag=> tagCandidates[tag] = candidates.filter(c=>c.eligible.includes(tag)));
+    const orderedSlots = [...slotUnits].sort((a,b)=> tagCandidates[a.tag].length - tagCandidates[b.tag].length);
+
+    let bestAssignments = []; let bestFilledCount = -1; let bestScore = Infinity;
+    let explored = 0; const EXPLORE_CAP = 150000;
+
+    function consider(currentAssignments, currentNz){
+        const filledCount = currentAssignments.length;
+        const score = minimize ? currentNz : Math.abs(currentNz - targetNz);
+        if(filledCount > bestFilledCount || (filledCount === bestFilledCount && score < bestScore - 1e-9)){
+            bestFilledCount = filledCount; bestScore = score; bestAssignments = currentAssignments.slice();
+        }
+    }
+    function dfs(idx, usedIds, currentAssignments, currentNz){
+        explored++;
+        if(explored > EXPLORE_CAP || idx === orderedSlots.length){ consider(currentAssignments, currentNz); return; }
+        const slot = orderedSlots[idx];
+        const options = tagCandidates[slot.tag].filter(c=>!usedIds.has(c.id));
+        if(options.length===0){ dfs(idx+1, usedIds, currentAssignments, currentNz); return; }
+        options.forEach(c=>{
+            usedIds.add(c.id);
+            currentAssignments.push({ courseId:c.id, courseName:c.name, nz:c.nz, tag:slot.tag, wasAssignedTo:c.currentTag });
+            dfs(idx+1, usedIds, currentAssignments, currentNz + c.nz);
+            currentAssignments.pop();
+            usedIds.delete(c.id);
+        });
+        dfs(idx+1, usedIds, currentAssignments, currentNz); // also consider leaving this slot unfilled
+    }
+    dfs(0, new Set(), [], 0);
+
+    const finalAssignments = bestAssignments;
+    const totalNzAfter = finalAssignments.reduce((s,a)=>s+a.nz,0);
+
+    // only the moves that actually change something — a course landing back on the exact
+    // tag it already had isn't a "change" worth showing in the preview.
+    const changes = finalAssignments.filter(a => a.wasAssignedTo !== a.tag);
+    // a previously-placed course that didn't make it into the winning combination at all
+    // gets freed back to the pool (this is the other half of a swap).
+    const finalUsedIds = new Set(finalAssignments.map(a=>a.courseId));
+    const freed = courses.filter(c => c.type==='elective' && c.assignedTrack && !finalUsedIds.has(c.id))
+                          .map(c => ({ courseId:c.id, courseName:c.name, nz:c.nz, fromTag:c.assignedTrack }));
+
+    const stillUnfilled = {};
+    TRACK_TAGS.forEach(tag=>{
+        const filled = finalAssignments.filter(a=>a.tag===tag).length;
+        const remain = (fullNeed[tag]||0) - filled;
+        if(remain>0) stillUnfilled[tag] = remain;
+    });
+
+    return { finalAssignments, changes, freed, stillUnfilled, totalNzAfter, targetNz: minimize?null:targetNz };
+}
+
+function getCourseBlocks(course, sem){
+    const blocks = [];
+    (course.components||[]).forEach(comp=>{
+        (comp.slots||[]).forEach(slot=>{
+            if(!slot.checked) return;
+            if(slot.sem && slot.sem !== String(sem)) return;
+            if(slot.day==='' || !slot.start) return;
+            blocks.push(slotToBlock(slot));
+        });
+    });
+    return blocks;
+}
+function blockListsCollide(a, b){
+    for(const x of a) for(const y of b) if(blocksOverlap(x,y)) return true;
+    return false;
+}
+
+// Same slot-filling search as computeElectiveNzPlan, but the search is steered toward maximizing
+// how many of the chosen electives use the preferred evaluation method (exam / assignment / other) —
+// and, unlike the nz engine, a candidate is never even offered for a slot if placing it there would
+// create a real time collision, either with the fixed (non-elective) schedule or with another
+// elective the plan is choosing at the same time.
+function computeElectiveEvalPlan(preferredMethod){
+    const fullNeed = {};
+    Object.entries(settings.tracks||{}).forEach(([key,tr])=>{
+        fullNeed[key+'-core'] = tr.coreMin||0;
+        fullNeed[key+'-elec'] = tr.elecMin||0;
+    });
+    let slotUnits = [];
+    TRACK_TAGS.forEach(tag=>{ for(let i=0;i<(fullNeed[tag]||0);i++) slotUnits.push({tag}); });
+
+    // baseline: every non-elective (always-scheduled) course's blocks, per semester — fixed
+    // regardless of which electives we end up choosing.
+    const baselineBySem = {};
+    courses.filter(c=>c.type!=='elective').forEach(c=>{
+        if(!baselineBySem[c.sem]) baselineBySem[c.sem] = [];
+        baselineBySem[c.sem].push(...getCourseBlocks(c, c.sem));
+    });
+
+    const candidates = courses.filter(c=>c.type==='elective').map(c=>({
+        id:c.id, name:c.name, nz:c.nz, evalMethod:c.evalMethod||'other', sem:c.sem, currentTag: c.assignedTrack || null,
+        eligible: (c.trackTags||[]).filter(t=>TRACK_TAGS.includes(t)),
+        blocks: getCourseBlocks(c, c.sem)
+    })).filter(c=>{
+        if(c.eligible.length===0) return false;
+        // a course whose own fixed time already collides with the mandatory schedule can never
+        // legally be placed, in any plan — drop it from consideration entirely.
+        return !blockListsCollide(c.blocks, baselineBySem[c.sem]||[]);
+    });
+
+    const tagCandidates = {};
+    TRACK_TAGS.forEach(tag=> tagCandidates[tag] = candidates.filter(c=>c.eligible.includes(tag)));
+    const orderedSlots = [...slotUnits].sort((a,b)=> tagCandidates[a.tag].length - tagCandidates[b.tag].length);
+
+    let bestAssignments = []; let bestFilledCount = -1; let bestMatchCount = -1;
+    let explored = 0; const EXPLORE_CAP = 150000;
+
+    function consider(currentAssignments, matchCount){
+        const filledCount = currentAssignments.length;
+        if(filledCount > bestFilledCount || (filledCount === bestFilledCount && matchCount > bestMatchCount)){
+            bestFilledCount = filledCount; bestMatchCount = matchCount; bestAssignments = currentAssignments.slice();
+        }
+    }
+    function dfs(idx, usedIds, currentAssignments, chosenBlocksBySem, matchCount){
+        explored++;
+        if(explored > EXPLORE_CAP || idx === orderedSlots.length){ consider(currentAssignments, matchCount); return; }
+        const slot = orderedSlots[idx];
+        const options = tagCandidates[slot.tag].filter(c=>{
+            if(usedIds.has(c.id)) return false;
+            const already = chosenBlocksBySem[c.sem] || [];
+            return !blockListsCollide(c.blocks, already);
+        });
+        if(options.length===0){ dfs(idx+1, usedIds, currentAssignments, chosenBlocksBySem, matchCount); return; }
+        options.forEach(c=>{
+            usedIds.add(c.id);
+            currentAssignments.push({ courseId:c.id, courseName:c.name, nz:c.nz, evalMethod:c.evalMethod, tag:slot.tag, wasAssignedTo:c.currentTag });
+            if(!chosenBlocksBySem[c.sem]) chosenBlocksBySem[c.sem] = [];
+            chosenBlocksBySem[c.sem].push(...c.blocks);
+            dfs(idx+1, usedIds, currentAssignments, chosenBlocksBySem, matchCount + (c.evalMethod===preferredMethod?1:0));
+            chosenBlocksBySem[c.sem].length -= c.blocks.length;
+            currentAssignments.pop();
+            usedIds.delete(c.id);
+        });
+        dfs(idx+1, usedIds, currentAssignments, chosenBlocksBySem, matchCount); // also consider leaving this slot unfilled
+    }
+    dfs(0, new Set(), [], {}, 0);
+
+    const finalAssignments = bestAssignments;
+    const changes = finalAssignments.filter(a => a.wasAssignedTo !== a.tag);
+    const finalUsedIds = new Set(finalAssignments.map(a=>a.courseId));
+    const freed = courses.filter(c => c.type==='elective' && c.assignedTrack && !finalUsedIds.has(c.id))
+                          .map(c => ({ courseId:c.id, courseName:c.name, nz:c.nz, fromTag:c.assignedTrack }));
+
+    const stillUnfilled = {};
+    TRACK_TAGS.forEach(tag=>{
+        const filled = finalAssignments.filter(a=>a.tag===tag).length;
+        const remain = (fullNeed[tag]||0) - filled;
+        if(remain>0) stillUnfilled[tag] = remain;
+    });
+    // courses that WOULD have helped fill a slot but were excluded from the very start because
+    // their fixed time collides with the mandatory schedule — worth surfacing separately, since
+    // "no room in the pool" and "collides with a mandatory course" call for different fixes.
+    const blockedByCollision = courses.filter(c=>c.type==='elective' && (c.trackTags||[]).length>0 && blockListsCollide(getCourseBlocks(c,c.sem), baselineBySem[c.sem]||[]))
+                          .map(c=>({courseId:c.id, courseName:c.name}));
+
+    return { finalAssignments, changes, freed, stillUnfilled, blockedByCollision, matchCount: bestMatchCount<0?0:bestMatchCount, totalChosen: finalAssignments.length, preferredMethod };
+}
+
+function runElectiveNzRecommendation(){
+    const val = parseFloat(document.getElementById('elective-nz-target-input').value);
+    if(isNaN(val) || val<0){ alert('נא להזין יעד נ"ז תקין'); return; }
+    recoElectiveNzTarget = val;
+    pendingElectiveNzPlan = computeElectiveNzPlan(val, false);
+    renderElectiveNzPreview();
+}
+function runElectiveNzMinimum(){
+    pendingElectiveNzPlan = computeElectiveNzPlan(0, true);
+    renderElectiveNzPreview();
+}
+function applyElectiveNzPlan(){
+    if(!pendingElectiveNzPlan) return;
+    const plan = pendingElectiveNzPlan;
+    if(plan.changes.length===0 && plan.freed.length===0) return;
+    pushHistory();
+    plan.finalAssignments.forEach(a=>{
+        const c = courses.find(x=>x.id===a.courseId); if(!c) return;
+        c.assignedTrack = a.tag;
+        const parts = a.tag.split('-');
+        if(TRACK_COLORS[parts[0]]) c.color = parts[1]==='core' ? TRACK_COLORS[parts[0]].core : TRACK_COLORS[parts[0]].elec;
+    });
+    plan.freed.forEach(f=>{
+        const c = courses.find(x=>x.id===f.courseId); if(!c) return;
+        c.assignedTrack = null;
+        c.color = TYPE_DEFAULTS['elective'].color;
+    });
+    pendingElectiveNzPlan = null;
+    saveData(false); renderAll();
+}
+function discardElectiveNzPlan(){ pendingElectiveNzPlan = null; renderElectiveNzPreview(); }
+
+function renderElectiveNzPreview(){
+    const el = document.getElementById('elective-nz-preview'); if(!el) return;
+    if(!pendingElectiveNzPlan){ el.innerHTML=''; return; }
+    const plan = pendingElectiveNzPlan;
+    if(plan.changes.length===0 && plan.freed.length===0){
+        const stillOver = Object.keys(plan.stillUnfilled).length>0
+            ? `<div class="reco-warn-msg">⚠️ אין מספיק קורסים (במאגר או בבלוקים) כדי למלא: ${Object.entries(plan.stillUnfilled).map(([t,n])=>`${TRACK_LABELS[t]} (${n})`).join(', ')} — הוסף עוד קורסי בחירה למאגר.</div>`
+            : `<p class="reco-empty-msg">✓ השיבוץ הנוכחי כבר הכי טוב שאפשר להשיג — אין שינויים להציע.</p>`;
+        el.innerHTML = `<div class="reco-preview">${stillOver}</div>`;
+        return;
+    }
+    el.innerHTML = `<div class="reco-preview">
+        <div class="reco-preview-title">שינויים מוצעים (${plan.changes.length + plan.freed.length}) — סה"כ נ"ז בחירה יעמוד על ${plan.totalNzAfter}${plan.targetNz!==null?` (יעד: ${plan.targetNz})`:''}</div>
+        <div class="reco-diff-list">
+          ${plan.changes.map(a=>`
+            <div class="reco-diff-item">
+              <span class="reco-diff-name">${a.courseName} <span style="color:var(--text-muted);font-weight:400">(${a.nz} נ"ז)</span></span>
+              <span class="reco-diff-change">${a.wasAssignedTo?`${TRACK_LABELS[a.wasAssignedTo]} ⟵ `:''}<b>${TRACK_LABELS[a.tag]}</b></span>
+            </div>`).join('')}
+          ${plan.freed.map(f=>`
+            <div class="reco-diff-item">
+              <span class="reco-diff-name">${f.courseName} <span style="color:var(--text-muted);font-weight:400">(${f.nz} נ"ז)</span></span>
+              <span class="reco-diff-change">${TRACK_LABELS[f.fromTag]} ⟵ <b>חוזר למאגר</b></span>
+            </div>`).join('')}
+        </div>
+        ${Object.keys(plan.stillUnfilled).length>0 ? `<div class="reco-warn-msg">⚠️ גם אחרי השיבוץ הזה עדיין חסרים קורסים עבור: ${Object.entries(plan.stillUnfilled).map(([t,n])=>`${TRACK_LABELS[t]} (${n})`).join(', ')}</div>` : ''}
+        <div class="reco-actions">
+          <button class="reco-apply-btn" onclick="applyElectiveNzPlan()">✓ החל שינויים</button>
+          <button class="reco-discard-btn" onclick="discardElectiveNzPlan()">בטל</button>
+        </div>
+    </div>`;
+}
+
+function setRecoEvalPreference(v){
+    recoEvalPreference = v;
+    pendingElectiveEvalPlan = null;
+    ['exam','assignment','other'].forEach(k=>{
+        const btn = document.getElementById('eval-pref-'+k); if(btn) btn.classList.toggle('selected', k===v);
+    });
+    renderElectiveEvalPreview();
+}
+function runElectiveEvalRecommendation(){
+    pendingElectiveEvalPlan = computeElectiveEvalPlan(recoEvalPreference);
+    renderElectiveEvalPreview();
+}
+function applyElectiveEvalPlan(){
+    if(!pendingElectiveEvalPlan) return;
+    const plan = pendingElectiveEvalPlan;
+    if(plan.changes.length===0 && plan.freed.length===0) return;
+    pushHistory();
+    plan.finalAssignments.forEach(a=>{
+        const c = courses.find(x=>x.id===a.courseId); if(!c) return;
+        c.assignedTrack = a.tag;
+        const parts = a.tag.split('-');
+        if(TRACK_COLORS[parts[0]]) c.color = parts[1]==='core' ? TRACK_COLORS[parts[0]].core : TRACK_COLORS[parts[0]].elec;
+    });
+    plan.freed.forEach(f=>{
+        const c = courses.find(x=>x.id===f.courseId); if(!c) return;
+        c.assignedTrack = null;
+        c.color = TYPE_DEFAULTS['elective'].color;
+    });
+    pendingElectiveEvalPlan = null;
+    saveData(false); renderAll();
+}
+function discardElectiveEvalPlan(){ pendingElectiveEvalPlan = null; renderElectiveEvalPreview(); }
+
+function renderElectiveEvalPreview(){
+    const el = document.getElementById('elective-eval-preview'); if(!el) return;
+    if(!pendingElectiveEvalPlan){ el.innerHTML=''; return; }
+    const plan = pendingElectiveEvalPlan;
+    const collisionWarn = plan.blockedByCollision.length>0
+        ? `<div class="reco-warn-msg">⛔ הקורסים הבאים לא הוצעו בכלל, כי השעה הקבועה שלהם מתנגשת עם קורס חובה במערכת: ${plan.blockedByCollision.map(b=>b.courseName).join(', ')}</div>` : '';
+    if(plan.changes.length===0 && plan.freed.length===0){
+        const stillOver = Object.keys(plan.stillUnfilled).length>0
+            ? `<div class="reco-warn-msg">⚠️ אין מספיק קורסים זמינים (וללא התנגשות) כדי למלא: ${Object.entries(plan.stillUnfilled).map(([t,n])=>`${TRACK_LABELS[t]} (${n})`).join(', ')} — הוסף עוד קורסי בחירה למאגר.</div>`
+            : `<p class="reco-empty-msg">✓ השיבוץ הנוכחי כבר הכי טוב שאפשר להשיג לפי ההעדפה הזו — אין שינויים להציע.</p>`;
+        el.innerHTML = `<div class="reco-preview">${stillOver}${collisionWarn}</div>`;
+        return;
+    }
+    el.innerHTML = `<div class="reco-preview">
+        <div class="reco-preview-title">שינויים מוצעים (${plan.changes.length + plan.freed.length}) — ${plan.matchCount} מתוך ${plan.totalChosen} קורסי הבחירה יהיו בדרך ההערכה המועדפת</div>
+        <div class="reco-diff-list">
+          ${plan.changes.map(a=>`
+            <div class="reco-diff-item">
+              <span class="reco-diff-name">${a.courseName} ${evalMethodBadgeHtml(a.evalMethod)}</span>
+              <span class="reco-diff-change">${a.wasAssignedTo?`${TRACK_LABELS[a.wasAssignedTo]} ⟵ `:''}<b>${TRACK_LABELS[a.tag]}</b></span>
+            </div>`).join('')}
+          ${plan.freed.map(f=>`
+            <div class="reco-diff-item">
+              <span class="reco-diff-name">${f.courseName} <span style="color:var(--text-muted);font-weight:400">(${f.nz} נ"ז)</span></span>
+              <span class="reco-diff-change">${TRACK_LABELS[f.fromTag]} ⟵ <b>חוזר למאגר</b></span>
+            </div>`).join('')}
+        </div>
+        ${Object.keys(plan.stillUnfilled).length>0 ? `<div class="reco-warn-msg">⚠️ גם אחרי השיבוץ הזה עדיין חסרים קורסים עבור: ${Object.entries(plan.stillUnfilled).map(([t,n])=>`${TRACK_LABELS[t]} (${n})`).join(', ')}</div>` : ''}
+        ${collisionWarn}
+        <div class="reco-actions">
+          <button class="reco-apply-btn" onclick="applyElectiveEvalPlan()">✓ החל שינויים</button>
+          <button class="reco-discard-btn" onclick="discardElectiveEvalPlan()">בטל</button>
+        </div>
+    </div>`;
+}
+
+// ===================== SCHEDULE ENGINE =====================
+function updateBlockStyle(val) { settings.blockStyle = val; saveData(false); renderScheduleTable(); }
+function toggleScheduleCollisionHighlight(val) { settings.highlightScheduleCollisions = val; saveData(false); renderScheduleTable(); }
+
+// Filter unassigned electives OUT of the schedule
+function getActiveScheduleCourses(sem) {
+    return courses.filter(c => c.sem === sem && (c.type !== 'elective' || c.assignedTrack));
+}
+
+function renderScheduleTable() {
+  const table = document.getElementById('sch-table'); if(!table) return;
+  const styleSel = document.getElementById('block-style-select'); if(styleSel && settings.blockStyle) styleSel.value = settings.blockStyle;
+  const collisionToggle = document.getElementById('collision-highlight-toggle'); if(collisionToggle) collisionToggle.checked = settings.highlightScheduleCollisions !== false;
+  const highlightCollisions = settings.highlightScheduleCollisions !== false;
+  
+  const sc = getActiveScheduleCourses(activeSem);
+
+  // per-day summary of hours that require actual physical attendance — answers "which days can I work"
+  const mandatoryHoursByDay = {}; DAYS.forEach((d,di)=> mandatoryHoursByDay[di]=0);
+  sc.forEach(c=>{
+    (c.components||[]).forEach(comp=>{
+      if(!comp.mustAttend) return;
+      (comp.slots||[]).forEach(slot=>{
+        if(!slot.checked || slot.day==='' || !slot.start) return;
+        if(slot.sem && slot.sem !== String(activeSem)) return;
+        let sh = HOURS.indexOf(slot.start); let eh = slot.end ? HOURS.indexOf(slot.end) : sh + 1;
+        if(eh<=sh) eh=sh+1; if(sh<0) return;
+        mandatoryHoursByDay[slot.day] = (mandatoryHoursByDay[slot.day]||0) + (eh-sh);
+      });
+    });
+  });
+  
+  let html = `<thead><tr><th style="width:70px">שעה</th>`;
+  DAYS.forEach((d,di) => {
+    const hrs = mandatoryHoursByDay[di]||0;
+    const workBadge = hrs>0
+      ? `<div style="font-size:9px;font-weight:400;color:#ef4444;margin-top:2px;white-space:nowrap;">🎯 ${hrs} ש' חובה</div>`
+      : `<div style="font-size:9px;font-weight:400;color:#22c55e;margin-top:2px;white-space:nowrap;">🟢 פנוי לעבודה</div>`;
+    html += `<th>${d}${workBadge}</th>`;
+  });
+  html += `</tr></thead><tbody><tr><td class="time-col">`;
+  HOURS.slice(0,-1).forEach(h => html += `<div class="time-slot-label">${h}</div>`);
+  html += `</td>`;
+
+  DAYS.forEach((day, di) => {
+    html += `<td class="day-col">`;
+    HOURS.slice(0,-1).forEach(() => { html += `<div class="grid-line"></div>`; });
+    
+    let daySlots = [];
+    sc.forEach(c => {
+      if(!c.components) return;
+      c.components.forEach((comp,ci) => {
+        if(!comp.slots) return;
+        comp.slots.forEach((slot,si) => {
+          if(slot.sem && slot.sem !== String(activeSem)) return;
+          if(slot.day === String(di) && slot.start) {
+            let sh = HOURS.indexOf(slot.start); let eh = slot.end ? HOURS.indexOf(slot.end) : sh + 1;
+            if (eh <= sh) eh = sh + 1; if (sh < 0) return;
+            daySlots.push({ c, comp, ci, slot, si, sh, eh });
+          }
+        });
+      });
+    });
+
+    daySlots.sort((a,b) => a.sh - b.sh || b.eh - a.eh);
+    let groups = []; let currentGroup = []; let groupEnd = -1;
+    daySlots.forEach(ds => {
+      if (ds.sh >= groupEnd && currentGroup.length > 0) { groups.push(currentGroup); currentGroup = []; }
+      currentGroup.push(ds); groupEnd = Math.max(groupEnd, ds.eh);
+    });
+    if (currentGroup.length > 0) groups.push(currentGroup);
+
+    groups.forEach(group => {
+      let cols = [];
+      group.forEach(ds => {
+         let placed = false;
+         for(let i=0; i<cols.length; i++){
+           if(cols[i][cols[i].length-1].eh <= ds.sh){ cols[i].push(ds); ds.colIdx = i; placed = true; break; }
+         }
+         if(!placed){ ds.colIdx = cols.length; cols.push([ds]); }
+      });
+      let collisionIndices = new Set();
+      for(let i=0; i<group.length; i++) {
+          for(let j=i+1; j<group.length; j++) {
+              let s1 = group[i], s2 = group[j];
+              if(s1.slot.checked && s2.slot.checked) {
+                  if(s1.sh < s2.eh && s1.eh > s2.sh) { collisionIndices.add(i); collisionIndices.add(j); }
+              }
+          }
+      }
+
+      group.forEach((ds, i) => {
+        const top = ds.sh * ROW_HEIGHT; const height = (ds.eh - ds.sh) * ROW_HEIGHT;
+        const isChecked = ds.slot.checked;
+        const typeLabel = typeLabelOf(ds.comp.type);
+        const isCollision = collisionIndices.has(i); 
+        const baseColor = ds.c.color || '#3b82f6';
+        const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+        const bStyle = settings.blockStyle || 'striped';
+
+        let bgColor, bgImage, borderStyle, textColor;
+        if (isChecked) {
+            if (bStyle === 'striped') {
+                bgColor = isLight ? '#ffffff' : `${baseColor}11`;
+                bgImage = `repeating-linear-gradient(45deg, ${baseColor}11, ${baseColor}11 6px, ${baseColor}33 6px, ${baseColor}33 12px)`;
+                borderStyle = `border-right-color: ${baseColor}; border-top:1px solid ${baseColor}66; border-bottom:1px solid ${baseColor}66; border-left:1px solid ${baseColor}66; box-shadow: 0 2px 5px rgba(0,0,0,0.05);`;
+                textColor = isLight ? '#0f172a' : '#ffffff';
+            } else if (bStyle === 'solid') {
+                bgColor = isLight ? `${baseColor}33` : `${baseColor}44`;
+                bgImage = 'none';
+                borderStyle = `border-right-color: ${baseColor}; border-top:1px solid ${baseColor}66; border-bottom:1px solid ${baseColor}66; border-left:1px solid ${baseColor}66;`;
+                textColor = isLight ? '#0f172a' : '#ffffff';
+            } else { 
+                bgColor = baseColor; bgImage = 'none';
+                borderStyle = `border: none; border-right: 4px solid rgba(0,0,0,0.3);`;
+                textColor = '#ffffff';
+            }
+        } else {
+            if (bStyle === 'striped') {
+                bgColor = isLight ? '#f8fafc' : `rgba(255,255,255,0.02)`;
+                bgImage = `repeating-linear-gradient(45deg, transparent, transparent 4px, ${isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)'} 4px, ${isLight ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)'} 8px)`;
+                borderStyle = `border: 1px dashed ${baseColor}66; border-right: 4px solid ${baseColor}66;`;
+            } else if (bStyle === 'solid') {
+                bgColor = isLight ? `${baseColor}11` : `${baseColor}22`; bgImage = 'none';
+                borderStyle = `border: 1px dashed ${baseColor}66; border-right: 4px solid ${baseColor}66;`;
+            } else { 
+                bgColor = isLight ? '#ffffff' : `rgba(255,255,255,0.05)`; bgImage = 'none';
+                borderStyle = `border: 2px dashed ${baseColor}66; border-right: 4px solid ${baseColor}66;`;
+            }
+            textColor = isLight ? '#475569' : 'rgba(255,255,255,0.7)';
+        }
+
+        if (isCollision && highlightCollisions) {
+            borderStyle = `border: 1px solid #ef4444 !important; border-right: 4px solid #ef4444 !important;`;
+            bgColor = isLight ? '#fef2f2' : `rgba(220,38,38,0.2)`; bgImage = 'none'; textColor = isLight ? '#991b1b' : '#ffffff';
+        }
+
+        const widthPerc = 100 / cols.length; const leftPerc = ds.colIdx * widthPerc;
+        const mustAttendMark = ds.comp.mustAttend ? '🎯 ' : '';
+        html += `<div class="sch-block ${(isCollision && highlightCollisions)?'collision':''}"
+          style="top:${top+1}px; height:${height-2}px; z-index:${isChecked?10:5}; 
+                 background-color:${bgColor}; background-image:${bgImage}; ${borderStyle} opacity:${isChecked?'1':(isLight?'0.7':'0.6')};
+                 width:calc(${widthPerc}% - 2px); left:${leftPerc}%;"
+          onclick="toggleSlot('${ds.c.id}',${ds.ci},${ds.si})">
+          <div class="sch-name" style="color: ${textColor};" title="${ds.c.name}${ds.comp.mustAttend?' — נוכחות חובה':''}">${mustAttendMark}${ds.c.name}</div>
+          <div class="sch-type" style="color: ${textColor};" title="${typeLabel} ${ds.slot.start}-${HOURS[ds.eh]}">${typeLabel} ${ds.slot.start}-${HOURS[ds.eh]}</div>
+          ${(isCollision && highlightCollisions)?'<span class="collision-warning">⚠️ התנגשות!</span>':''}
+        </div>`;
+      });
+    });
+    html += `</td>`;
+  });
+  table.innerHTML = html + `</tr></tbody>`;
+}
+
+function renderScheduleEditor() {
+  const cseList = document.getElementById('cse-list'); if(!cseList) return;
+  const sc = getActiveScheduleCourses(activeSem);
+  
+  if(sc.length===0){ cseList.innerHTML='<p style="font-size:13px;color:var(--text-muted)">אין קורסים רלוונטיים בסמסטר זה</p>'; return; }
+  
+  let html = '';
+  sc.forEach(c=>{
+    html += `<div class="cse-row"><div class="cse-name"><div class="cse-dot" style="background:${c.color}"></div>${c.name}</div><div class="cse-comp-wrap">`;
+    
+    (c.components||[]).forEach((comp, ci) => {
+        const typeL = typeLabelOf(comp.type);
+        // Only show slots relevant to the ACTIVE semester
+        const activeSlots = (comp.slots||[]).map((slot,si)=>({slot,si})).filter(x=>x.slot.sem === String(activeSem) || x.slot.sem === '');
+
+        html += `<div class="cse-comp-group">`;
+        html += `<div class="cse-comp-title">${typeL}</div>`;
+
+        activeSlots.forEach(x => {
+            const btnId = `btn-toggle-${c.id}-${ci}-${x.si}`;
+            html += `
+              <div class="cse-comp" id="cse-comp-wrapper-${c.id}-${ci}-${x.si}" style="border-color:${x.slot.checked ? c.color : ''}">
+                <div style="display:flex; align-items:center; gap:4px;">
+                    <span style="font-size:11px;color:var(--text-muted)">יום:</span>
+                    <select onchange="updateSlot('${c.id}',${ci},${x.si},'day',this.value)">
+                    <option value="">--</option>${DAYS.map((d,i)=>`<option value="${i}" ${x.slot.day===String(i)?'selected':''}>${d}</option>`).join('')}
+                    </select>
+                </div>
+                <div style="display:flex; align-items:center; gap:4px;">
+                    <span style="font-size:11px;color:var(--text-muted)">מ:</span>
+                    <select onchange="updateSlot('${c.id}',${ci},${x.si},'start',this.value)">
+                    <option value="">--</option>${HOURS.slice(0,-1).map(h=>`<option value="${h}" ${x.slot.start===h?'selected':''}>${h}</option>`).join('')}
+                    </select>
+                </div>
+                <div style="display:flex; align-items:center; gap:4px;">
+                    <span style="font-size:11px;color:var(--text-muted)">עד:</span>
+                    <select onchange="updateSlot('${c.id}',${ci},${x.si},'end',this.value)">
+                    <option value="">--</option>${HOURS.slice(1).map(h=>`<option value="${h}" ${x.slot.end===h?'selected':''}>${h}</option>`).join('')}
+                    </select>
+                </div>
+                <button id="${btnId}" onclick="toggleSlot('${c.id}',${ci},${x.si})" style="background:${x.slot.checked?c.color:'rgba(0,0,0,0.3)'};color:${x.slot.checked?'#000':c.color};border-color:${c.color};font-size:11px;padding:4px 12px;border-radius:6px;cursor:pointer;border:1px solid;font-family:'Heebo';font-weight:600;transition:all .15s;margin-right:10px;">
+                    ${x.slot.checked?'✓ פעיל':'בחר'}
+                </button>
+                ${comp.slots.length>1?`<button class="remove-slot-btn" style="background:none;border:none;color:var(--text-darker);cursor:pointer;font-size:12px;text-decoration:underline;margin-right:auto;" onclick="removeSlot('${c.id}',${ci},${x.si})">הסר</button>`:''}
+              </div>`;
+        });
+        html += `<div style="margin-top:6px;"><button class="add-slot-btn" onclick="addSlot('${c.id}',${ci}, '${activeSem}')" style="background:transparent;border:1px dashed var(--primary);color:var(--primary);border-radius:6px;padding:4px 10px;font-size:11px;cursor:pointer">+ הוסף אופציה</button></div>`;
+        html += `</div>`;
+    });
+    html += `</div></div>`;
+  });
+  cseList.innerHTML = html;
+}
+
+function renderSchedule() {
+  const sel = document.getElementById('sem-selector'); if(sel) sel.innerHTML = [5,6,7,8].map(s=>`<button class="sem-btn ${s===activeSem?'active':''}" onclick="setActiveSem(${s})">סמסטר ${s}</button>`).join('');
+  renderRecoPanel();
+  renderScheduleTable();
+  renderScheduleEditor();
+}
+
+function setActiveSem(s){ activeSem=s; renderSchedule(); }
+
+// SUMMARY TAB
+// Picks black or white text based on the actual color's own brightness — this makes summary
+// blocks readable regardless of app theme, browser quirks, or print rendering, since it never
+// depends on reading data-theme at all, only on the color already being drawn.
+function getReadableTextColor(hexColor){
+  const hex = (hexColor||'#3b82f6').replace('#','');
+  if(hex.length!==6) return '#ffffff';
+  const r = parseInt(hex.substring(0,2),16), g = parseInt(hex.substring(2,4),16), b = parseInt(hex.substring(4,6),16);
+  if([r,g,b].some(isNaN)) return '#ffffff';
+  const lum = (0.2126*r + 0.7152*g + 0.0722*b)/255;
+  return lum > 0.6 ? '#0f172a' : '#ffffff';
+}
+
+function buildSemesterSummaryGrid(sem, highlightCollisions){
+  const sc = getActiveScheduleCourses(sem);
+  const totalNz = sc.reduce((s,c)=>s+c.nz,0);
+  let html = `<div class="summary-sem-block">
+    <div class="summary-sem-head"><span>סמסטר ${sem}</span><span class="summary-sem-stats">${sc.length} קורסים · ${totalNz.toFixed(1)} נ"ז</span></div>`;
+
+  if(sc.length===0){
+    html += `<div class="summary-empty-msg">אין קורסים משובצים לסמסטר זה.</div></div>`;
+    return html;
+  }
+
+  html += `<div class="sch-wrap"><table class="sch-table"><thead><tr><th style="width:60px">שעה</th>`;
+  DAYS.forEach(d=>html+=`<th>${d}</th>`);
+  html += `</tr></thead><tbody><tr><td class="time-col">`;
+  HOURS.slice(0,-1).forEach(h => html += `<div class="time-slot-label">${h}</div>`);
+  html += `</td>`;
+
+  DAYS.forEach((day, di) => {
+    html += `<td class="day-col">`;
+    HOURS.slice(0,-1).forEach(() => { html += `<div class="grid-line"></div>`; });
+
+    let daySlots = [];
+    sc.forEach(c => {
+      if(!c.components) return;
+      c.components.forEach((comp,ci) => {
+        if(!comp.slots) return;
+        comp.slots.forEach((slot,si) => {
+          if(!slot.checked) return;
+          if(slot.sem && slot.sem !== String(sem)) return;
+          if(slot.day === String(di) && slot.start) {
+            let sh = HOURS.indexOf(slot.start); let eh = slot.end ? HOURS.indexOf(slot.end) : sh + 1;
+            if (eh <= sh) eh = sh + 1; if (sh < 0) return;
+            daySlots.push({ c, comp, slot, sh, eh });
+          }
+        });
+      });
+    });
+
+    daySlots.sort((a,b) => a.sh - b.sh || b.eh - a.eh);
+    let groups = []; let currentGroup = []; let groupEnd = -1;
+    daySlots.forEach(ds => {
+      if (ds.sh >= groupEnd && currentGroup.length > 0) { groups.push(currentGroup); currentGroup = []; }
+      currentGroup.push(ds); groupEnd = Math.max(groupEnd, ds.eh);
+    });
+    if (currentGroup.length > 0) groups.push(currentGroup);
+
+    groups.forEach(group => {
+      let cols = [];
+      group.forEach(ds => {
+         let placed = false;
+         for(let i=0; i<cols.length; i++){
+           if(cols[i][cols[i].length-1].eh <= ds.sh){ cols[i].push(ds); ds.colIdx = i; placed = true; break; }
+         }
+         if(!placed){ ds.colIdx = cols.length; cols.push([ds]); }
+      });
+      // side-by-side placement always happens regardless of the toggle — the toggle only
+      // decides whether overlapping items get the red warning treatment or their normal color
+      const isCollision = group.length>1 && highlightCollisions;
+      const widthPerc = 100 / cols.length;
+      group.forEach(ds => {
+        const top = ds.sh * ROW_HEIGHT; const height = (ds.eh - ds.sh) * ROW_HEIGHT;
+        const typeLabel = typeLabelOf(ds.comp.type);
+        const baseColor = ds.c.color || '#3b82f6';
+        const leftPerc = ds.colIdx * widthPerc;
+        let border, bg, textColor;
+        if(isCollision){
+          border = `border: 1px solid #b91c1c; border-right: 4px solid #b91c1c;`;
+          bg = '#ef4444';
+          textColor = '#ffffff';
+        } else {
+          border = `border-right: 4px solid ${baseColor}; border: 1px solid ${baseColor};`;
+          bg = baseColor;
+          textColor = getReadableTextColor(baseColor);
+        }
+        html += `<div class="sch-block" style="top:${top+1}px; height:${height-2}px; background-color:${bg}; ${border} width:calc(${widthPerc}% - 2px); left:${leftPerc}%;">
+          <div class="sch-name" style="color:${textColor};" title="${ds.c.name}">${ds.c.name}</div>
+          <div class="sch-type" style="opacity:.85; color:${textColor};">${typeLabel} ${ds.slot.start}-${HOURS[ds.eh]}</div>
+          ${isCollision?'<span class="collision-warning">⚠️ התנגשות!</span>':''}
+        </div>`;
+      });
+    });
+    html += `</td>`;
+  });
+  html += `</tr></tbody></table></div></div>`;
+  return html;
+}
+
+// List view: a simple table of every course per semester, plus a read-only echo of the
+// track-pool assignment (core/elective per track) so the whole picture is skimmable/printable
+// without needing the drag-and-drop tab.
+function buildSemesterSummaryList(sem){
+  const sc = getActiveScheduleCourses(sem);
+  const totalNz = sc.reduce((s,c)=>s+c.nz,0);
+  const typeMap = getTypeMap();
+  let html = `<div class="summary-sem-block">
+    <div class="summary-sem-head"><span>סמסטר ${sem}</span><span class="summary-sem-stats">${sc.length} קורסים · ${totalNz.toFixed(1)} נ"ז</span></div>`;
+  if(sc.length===0){
+    html += `<div class="summary-empty-msg">אין קורסים משובצים לסמסטר זה.</div></div>`;
+    return html;
+  }
+  html += `<table class="summary-list-table"><thead><tr><th>קורס</th><th>סוג</th><th>נ"ז</th></tr></thead><tbody>`;
+  sc.sort((a,b)=>a.name.localeCompare(b.name,'he')).forEach(c=>{
+    const label = c.type==='elective' ? (TRACK_LABELS[c.assignedTrack] || 'בחירה') : ((typeMap[c.type]||{}).label || c.type);
+    html += `<tr><td>${c.name}</td><td><span style="color:${c.color}">●</span> ${label}</td><td>${c.nz}</td></tr>`;
+  });
+  html += `</tbody></table></div>`;
+  return html;
+}
+
+function buildTrackAssignmentSummary(){
+  const electives = courses.filter(c => c.type === 'elective' && c.assignedTrack);
+  let html = `<div class="summary-sem-block"><div class="summary-sem-head"><span>שיבוץ קורסי בחירה למסלולים</span></div>`;
+  html += `<div class="pool-assigned-tracks" style="margin-top:0;">`;
+  Object.keys(settings.tracks || {}).forEach(tKey => {
+    const trackColor = TRACK_COLORS[tKey] ? TRACK_COLORS[tKey].core : 'var(--border)';
+    ['core', 'elec'].forEach(type => {
+      const tag = `${tKey}-${type}`;
+      const assigned = electives.filter(c => c.assignedTrack === tag);
+      html += `<div class="track-block" style="border-top: 4px solid ${trackColor};">
+        <h4>${TRACK_LABELS[tag]} (${assigned.length})</h4>
+        ${assigned.length===0 ? `<p class="pool-empty-msg">— טרם שובץ קורס —</p>` : assigned.map(c => `
+        <div class="pool-course-item" style="background:var(--surface); cursor:default;">
+            <div class="pool-course-top">
+                <span style="display:flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:${c.color}"></span>${c.name}</span>
+                <span style="font-size:10px;color:var(--text-muted)">(${c.nz} נ"ז · סמ' ${c.sem})</span>
+            </div>
+        </div>`).join('')}
+      </div>`;
+    });
+  });
+  html += `</div></div>`;
+  return html;
+}
+
+// Finds any (non-optional) component of a scheduled course that has real time options
+// but none of them selected — i.e. something the student meant to pick a time for and
+// simply forgot, which the summary should surface loudly rather than silently omit.
+function getMissingSelections(){
+  const missing = [];
+  SEM_LIST.forEach(sem=>{
+    getActiveScheduleCourses(sem).forEach(c=>{
+      (c.components||[]).forEach(comp=>{
+        if(comp.optional) return;
+        const realSlots = (comp.slots||[]).filter(s=>s.day!=='' && s.start!=='' && (!s.sem || s.sem===String(sem)));
+        if(realSlots.length===0) return; // nothing configured for this component at all — not what we're checking here
+        if(!realSlots.some(s=>s.checked)){
+          missing.push({ courseId:c.id, courseName:c.name, sem, compType: typeLabelOf(comp.type) });
+        }
+      });
+    });
+  });
+  return missing;
+}
+function buildMissingSelectionWarning(){
+  const missing = getMissingSelections();
+  if(missing.length===0) return '';
+  return `<div class="reco-warn-msg" style="margin-bottom:16px;">
+    ⚠️ יש רכיבים עם כמה אופציות שעה שעדיין לא נבחרה להם שעה סופית — הם <b>לא</b> מופיעים במערכת השעות למטה:
+    <ul style="margin:6px 0 0; padding-inline-start:20px;">
+      ${missing.map(m=>`<li>${m.courseName} — ${m.compType} (סמ' ${m.sem})</li>`).join('')}
+    </ul>
+    לך ל"מערכת שעות" ובחר שעה לכל אחד מהם, או סמן את הרכיב כ"רשות" בעריכת הקורס אם הוא באמת לא חובה.
+  </div>`;
+}
+
+function renderSummary(){
+  const tb = document.getElementById('summary-track-bar');
+  if(tb){ renderTrackBar(); tb.innerHTML = document.getElementById('track-bar').innerHTML; }
+  const container = document.getElementById('summary-body'); if(!container) return;
+  const collisionToggle = document.getElementById('summary-highlight-collisions');
+  if(collisionToggle) collisionToggle.checked = settings.highlightScheduleCollisions !== false;
+  const checked = Array.from(document.querySelectorAll('.summary-sem-check:checked')).map(el=>parseInt(el.value));
+  if(checked.length===0){ container.innerHTML = `<div class="summary-empty-msg">בחר לפחות סמסטר אחד להצגה.</div>`; return; }
+  const sortedSems = checked.sort((a,b)=>a-b);
+  const viewMode = (document.querySelector('input[name="summary-view-mode"]:checked')||{}).value || 'grid';
+  const warning = buildMissingSelectionWarning();
+  if(viewMode === 'list'){
+    container.innerHTML = warning + buildTrackAssignmentSummary() + sortedSems.map(s=>buildSemesterSummaryList(s)).join('');
+  } else {
+    const highlightCollisions = settings.highlightScheduleCollisions !== false;
+    container.innerHTML = warning + sortedSems.map(s=>buildSemesterSummaryGrid(s, highlightCollisions)).join('');
+  }
+}
+
+function updateSlot(cId, cIdx, sIdx, field, value) {
+    pushHistory();
+    const c = courses.find(x=>x.id===cId);
+    c.components[cIdx].slots[sIdx][field] = value;
+    saveData(false);
+    renderScheduleTable(); // Update only table, keeps focus!
+}
+
+function toggleSlot(cId, cIdx, sIdx) {
+    pushHistory();
+    const c = courses.find(x=>x.id===cId);
+    const slot = c.components[cIdx].slots[sIdx];
+    slot.checked = !slot.checked;
+    saveData(false);
+    renderScheduleTable(); // Update only table
+    
+    const btn = document.getElementById(`btn-toggle-${cId}-${cIdx}-${sIdx}`);
+    const wrapper = document.getElementById(`cse-comp-wrapper-${cId}-${cIdx}-${sIdx}`);
+    if(btn) {
+        btn.style.background = slot.checked ? c.color : 'rgba(0,0,0,0.3)';
+        btn.style.color = slot.checked ? '#000' : c.color;
+        btn.innerHTML = slot.checked ? '✓ פעיל' : 'בחר';
+    }
+    if(wrapper) wrapper.style.borderColor = slot.checked ? c.color : '';
+}
+
+function addSlot(cId, cIdx, semAllowed){
+  pushHistory(); const c = courses.find(x=>x.id===cId); if(!c) return;
+  c.components[cIdx].slots.push({sem:String(semAllowed), day:'', start:'', end:'', checked:false});
+  saveData(false); renderScheduleEditor(); renderScheduleTable();
+}
+
+function removeSlot(cId, cIdx, sIdx){
+  pushHistory(); const c = courses.find(x=>x.id===cId); if(!c) return;
+  c.components[cIdx].slots.splice(sIdx,1);
+  if(c.components[cIdx].slots.length===0) c.components[cIdx].slots.push({sem:'',day:'',start:'',end:'',checked:false});
+  saveData(false); renderScheduleEditor(); renderScheduleTable();
+}
+
+// ===================== RECOMMENDATIONS =====================
+function toggleRecoPanel(){ recoPanelOpen = !recoPanelOpen; renderRecoPanel(); }
+function toggleRecoDay(idx){ const s = String(idx); const i = recoPreferredDays.indexOf(s); if(i>-1) recoPreferredDays.splice(i,1); else recoPreferredDays.push(s); pendingDayPlan = null; renderRecoPanel(); }
+const SEM_LIST = [5,6,7,8];
+function typeLabelOf(t){ const L = (settings.compTypeLabels)||DEFAULT_SETTINGS.compTypeLabels; return L[t] || L.other || 'רכיב'; }
+function compTypeOptionsHTML(selected){
+  const L = (settings.compTypeLabels)||DEFAULT_SETTINGS.compTypeLabels;
+  return ['lecture','tirgul','lab','other'].map(k=>`<option value="${k}" ${selected===k?'selected':''}>${L[k]}</option>`).join('');
+}
+
+function slotToBlock(slot){
+  const sh = HOURS.indexOf(slot.start); let eh = slot.end ? HOURS.indexOf(slot.end) : sh+1;
+  if(eh<=sh) eh = sh+1;
+  return { day: slot.day, sh, eh };
+}
+function blocksOverlap(a,b){ return a.day===b.day && a.sh < b.eh && b.sh < a.eh; }
+
+function runDayCompression(){
+  const changes = []; const touchedSemesters = new Set();
+  SEM_LIST.forEach(sem=>{
+    const sc = getActiveScheduleCourses(sem); if(sc.length===0) return;
+    const comps = [];
+    sc.forEach(c=>{
+      (c.components||[]).forEach((comp,ci)=>{
+        const slots = (comp.slots||[]).filter(s=>s.day!=='' && s.start!=='' && (!s.sem || s.sem === String(sem)));
+        if(slots.length===0) return;
+        comps.push({course:c, comp, ci, options: slots});
+      });
+    });
+    // occupiedBlocks starts with every locked (single-option) component's time, and grows as
+    // each flexible component below gets decided — so no two chosen times can ever overlap.
+    let usedDays = new Set();
+    let occupiedBlocks = [];
+    comps.filter(x=>x.options.length<=1).forEach(x=>{ usedDays.add(x.options[0].day); occupiedBlocks.push(slotToBlock(x.options[0])); });
+    const flexible = comps.filter(x=>x.options.length>1).sort((a,b)=> a.options.length - b.options.length);
+    flexible.forEach(x=>{
+      let best = null, bestScore = -Infinity;
+      x.options.forEach(opt=>{
+        const block = slotToBlock(opt);
+        const collides = occupiedBlocks.some(b => blocksOverlap(b, block));
+        let score = 0;
+        if(collides) score -= 1000000; // avoiding a real time clash always wins over day preference/clustering
+        if(recoPreferredDays.length>0 && recoPreferredDays.includes(opt.day)) score += 1000;
+        if(usedDays.has(opt.day)) score += 50; 
+        if(opt.checked) score += 1; // tie-breaker: never swap to an equally-good day just because it happens to score the same
+        if(score > bestScore){ bestScore = score; best = opt; }
+      });
+      if(best){
+        usedDays.add(best.day);
+        occupiedBlocks.push(slotToBlock(best));
+        const currentChecked = x.options.find(s=>s.checked);
+        if(currentChecked !== best){
+          const bestIdx = x.comp.slots.indexOf(best);
+          changes.push({ courseId: x.course.id, compIdx: x.ci, newSlotIdx: bestIdx, courseName: x.course.name, typeLabel: typeLabelOf(x.comp.type), oldLabel: currentChecked ? `${DAYS[currentChecked.day]} ${currentChecked.start}` : `לא נבחר`, newLabel: `${DAYS[best.day]} ${best.start}`, sem });
+          touchedSemesters.add(sem);
+        }
+      }
+    });
+  });
+  pendingDayPlan = { changes, touchedSemesters: Array.from(touchedSemesters) };
+  renderRecoPanel();
+}
+function applyDayCompression(){
+  if(!pendingDayPlan || pendingDayPlan.changes.length===0) return; pushHistory();
+  pendingDayPlan.changes.forEach(ch=>{
+    const c = courses.find(x=>x.id===ch.courseId); if(!c) return;
+    const comp = c.components[ch.compIdx]; if(!comp) return;
+    comp.slots.forEach((s,i)=>{ if(!s.sem || s.sem === String(ch.sem)) s.checked = (i===ch.newSlotIdx); });
+  });
+  pendingDayPlan = null; saveData(false); renderSchedule();
+}
+
+function runNzBalance(){
+  const val = parseFloat(document.getElementById('reco-nz-input').value);
+  if(!val || val<=0) return alert('נא להזין מספר נ"ז מקסימלי תקין');
+  recoMaxNz = val;
+  const working = JSON.parse(JSON.stringify(courses));
+  const moveByCourse = {}; const movedIds = new Set();
+  const totalsFor = (list)=>{ const t = {}; SEM_LIST.forEach(s=>t[s]=0); list.forEach(c=>{ if(t[c.sem]!==undefined && (c.type!=='elective' || c.assignedTrack)) t[c.sem]+=c.nz; }); return t; };
+  const totalsBefore = totalsFor(working);
+  const overshootOf = (totals) => SEM_LIST.reduce((sum,s)=> sum + Math.max(0, totals[s]-val), 0);
+
+  const prereqOkFor = (course, targetSem) => {
+      for(const preId of (course.prereqIds||[])){
+          const pre = working.find(x=>x.id===preId); if(!pre) continue;
+          const { allowsBefore, allowsConcurrent } = getPrereqMode(course, preId);
+          if(prereqViolated(targetSem, pre.sem, allowsBefore, allowsConcurrent)) return false;
+      }
+      for(const other of working){
+          if(other.id===course.id) continue;
+          if((other.prereqIds||[]).includes(course.id)){
+              const { allowsBefore, allowsConcurrent } = getPrereqMode(other, course.id);
+              if(prereqViolated(other.sem, targetSem, allowsBefore, allowsConcurrent)) return false;
+          }
+      }
+      return true;
+  };
+
+  let iterations = 200;
+  while(iterations-- > 0){
+    const totals = totalsFor(working);
+    const currentOvershoot = overshootOf(totals);
+    if(currentOvershoot <= 0) break; 
+
+    let bestMove = null; let bestOvershoot = currentOvershoot;
+    SEM_LIST.filter(s=>totals[s]>val).forEach(sem=>{
+      const candidates = working.filter(c=>c.sem===sem && !c.fixed && c.canMove && c.canMove.length>1 && !movedIds.has(c.id) && (c.type!=='elective' || c.assignedTrack));
+      candidates.forEach(cand=>{
+        const targets = cand.canMove.filter(t=>t!==sem && prereqOkFor(cand, t));
+        targets.forEach(t=>{
+          const trial = {...totals}; trial[sem] -= cand.nz; trial[t] += cand.nz;
+          const trialOvershoot = overshootOf(trial);
+          if(trialOvershoot < bestOvershoot){
+            bestOvershoot = trialOvershoot; bestMove = { cand, from: sem, to: t };
+          }
+        });
+      });
+    });
+
+    if(!bestMove) break; 
+    const { cand, from, to } = bestMove;
+    cand.sem = to; movedIds.add(cand.id);
+    moveByCourse[cand.id] = { courseId: cand.id, courseName: cand.name, nz: cand.nz, from, to };
+  }
+
+  const totalsAfter = totalsFor(working);
+  const unresolved = SEM_LIST.filter(s=>totalsAfter[s]>val).map(s=>({sem:s, over: +(totalsAfter[s]-val).toFixed(1), total: totalsAfter[s]}));
+  const moves = Object.values(moveByCourse).filter(m=>m.from!==m.to);
+  pendingNzPlan = { moves, totalsBefore, totalsAfter, unresolved };
+  renderRecoPanel();
+}
+
+function applyNzBalance(){
+  if(!pendingNzPlan || pendingNzPlan.moves.length===0) return; pushHistory();
+  pendingNzPlan.moves.forEach(m=>{ const c = courses.find(x=>x.id===m.courseId); if(c) c.sem = m.to; });
+  pendingNzPlan = null; saveData(false); renderPlanner(); renderSchedule();
+}
+
+function setRecoSemBias(v){ recoSemBias = v; pendingSemPlan = null; renderRecoPanel(); }
+
+// Independent third engine: for every flexible course (2+ semester options), recommends which
+// semester to place it in based on a combination of (a) how loaded each candidate semester
+// already is in nz, and (b) whether the course would need to add a NEW day of campus attendance
+// to that semester or can reuse a day that's already in use there. Respects prerequisites.
+// The bias toggle nudges the recommendation toward lightening year ג' (סמ' 5-6) or year ד' (7-8);
+// "balance" has no directional preference, just load + day minimization.
+function runSemPlacementReco(){
+  const working = JSON.parse(JSON.stringify(courses));
+  const isActive = c => (c.type!=='elective' || c.assignedTrack);
+
+  const totals = {}; const usedDays = {}; SEM_LIST.forEach(s=>{ totals[s]=0; usedDays[s]=new Set(); });
+  working.forEach(c=>{
+    if(!isActive(c) || totals[c.sem]===undefined) return;
+    totals[c.sem] += c.nz;
+    (c.components||[]).forEach(comp=>{
+      (comp.slots||[]).forEach(slot=>{
+        if(slot.checked && slot.day!=='' && (!slot.sem || slot.sem===String(c.sem))) usedDays[c.sem].add(slot.day);
+      });
+    });
+  });
+
+  const prereqOkFor = (course, targetSem) => {
+      for(const preId of (course.prereqIds||[])){
+          const pre = working.find(x=>x.id===preId); if(!pre) continue;
+          const { allowsBefore, allowsConcurrent } = getPrereqMode(course, preId);
+          if(prereqViolated(targetSem, pre.sem, allowsBefore, allowsConcurrent)) return false;
+      }
+      for(const other of working){
+          if(other.id===course.id) continue;
+          if((other.prereqIds||[]).includes(course.id)){
+              const { allowsBefore, allowsConcurrent } = getPrereqMode(other, course.id);
+              if(prereqViolated(other.sem, targetSem, allowsBefore, allowsConcurrent)) return false;
+          }
+      }
+      return true;
+  };
+
+  const daysFor = (course, sem) => {
+    const days = new Set();
+    (course.components||[]).forEach(comp=>{
+      const opts = (comp.slots||[]).filter(o=>o.day!=='' && o.start!=='' && (!o.sem || o.sem===String(sem)));
+      const chosen = opts.find(o=>o.checked) || opts[0];
+      if(chosen) days.add(chosen.day);
+    });
+    return days;
+  };
+
+  const movable = working.filter(c=>!c.fixed && c.canMove && c.canMove.length>1 && isActive(c));
+  movable.sort((a,b)=> a.canMove.length - b.canMove.length); // most-constrained courses decided first
+
+  const moves = [];
+  movable.forEach(c=>{
+    const from = c.sem;
+    const validTargets = c.canMove.filter(s=>totals[s]!==undefined && prereqOkFor(c, s));
+    if(validTargets.length===0) return;
+    let bestSem = from, bestScore = -Infinity;
+    validTargets.forEach(s=>{
+      let score = -totals[s]; // prefer the less-loaded semester
+      const needed = daysFor(c, s);
+      let addedDays = 0; needed.forEach(d=>{ if(!usedDays[s].has(d)) addedDays++; });
+      score += -(addedDays * 6); // adding a new campus day outweighs a couple of nz points
+      if(recoSemBias==='relief3' && s>=7) score += 8; // נטייה להקל על שנה ג' -> להעדיף שנה ד'
+      if(recoSemBias==='relief4' && s<=6) score += 8; // נטייה להקל על שנה ד' -> להעדיף שנה ג'
+      if(s===from) score += 1; // לא לזוז בלי סיבה כשהניקוד שקול
+      if(score > bestScore){ bestScore = score; bestSem = s; }
+    });
+    if(bestSem !== from){
+      totals[from] -= c.nz; totals[bestSem] += c.nz;
+      daysFor(c, bestSem).forEach(d=>usedDays[bestSem].add(d));
+      c.sem = bestSem;
+      moves.push({ courseId: c.id, courseName: c.name, nz: c.nz, from, to: bestSem });
+    }
+  });
+
+  pendingSemPlan = { moves };
+  renderRecoPanel();
+}
+
+function applySemPlacementReco(){
+  if(!pendingSemPlan || pendingSemPlan.moves.length===0) return; pushHistory();
+  pendingSemPlan.moves.forEach(m=>{ const c = courses.find(x=>x.id===m.courseId); if(c) c.sem = m.to; });
+  pendingSemPlan = null; saveData(false); renderPlanner(); renderSchedule();
+}
+
+function renderRecoPanel(){
+  const toggle = document.getElementById('reco-toggle'); const body = document.getElementById('reco-body');
+  if(!toggle || !body) return;
+  toggle.classList.toggle('open', recoPanelOpen); if(!recoPanelOpen){ body.innerHTML=''; return; }
+
+  const dayChips = DAYS.map((d,i)=>`<button type="button" class="day-chip ${recoPreferredDays.includes(String(i))?'selected':''}" onclick="toggleRecoDay(${i})">${d}</button>`).join('');
+
+  let dayPreviewHtml = '';
+  if(pendingDayPlan){
+    if(pendingDayPlan.changes.length===0) dayPreviewHtml = `<div class="reco-preview"><p style="font-size:12px;color:var(--text-muted)">✓ המערכת כבר מותאמת במיטבה.</p></div>`;
+    else {
+      dayPreviewHtml = `<div class="reco-preview"><div class="reco-preview-title">שינויים מוצעים</div><div class="reco-diff-list">
+          ${pendingDayPlan.changes.map(ch=>`<div class="reco-diff-item"><span style="font-weight:600">${ch.courseName}</span><span style="color:var(--text-muted)">${ch.oldLabel} ⟵ <b style="color:var(--green-neon)">${ch.newLabel}</b></span></div>`).join('')}
+        </div><div class="reco-actions"><button class="reco-apply-btn" onclick="applyDayCompression()">✓ החל</button><button class="reco-discard-btn" onclick="pendingDayPlan=null;renderRecoPanel()">בטל</button></div></div>`;
+    }
+  }
+
+  let nzPreviewHtml = '';
+  if(pendingNzPlan){
+    if(pendingNzPlan.moves.length===0) nzPreviewHtml = `<div class="reco-preview"><p style="font-size:12px;color:var(--text-muted)">✓ כל הסמסטרים עומדים ביעד (או נעולים).</p></div>`;
+    else {
+      nzPreviewHtml = `<div class="reco-preview"><div class="reco-preview-title">שינויי סמסטר מוצעים</div><div class="reco-diff-list">
+          ${pendingNzPlan.moves.map(m=>`<div class="reco-diff-item"><span style="font-weight:600">${m.courseName} <span style="font-weight:400">(${m.nz} נ"ז)</span></span><span style="color:var(--text-muted)">סמ' ${m.from} ⟵ <b style="color:var(--green-neon)">סמ' ${m.to}</b></span></div>`).join('')}
+        </div><div class="reco-actions"><button class="reco-apply-btn" onclick="applyNzBalance()">✓ החל</button><button class="reco-discard-btn" onclick="pendingNzPlan=null;renderRecoPanel()">בטל</button></div></div>`;
+    }
+  }
+
+  const biasChips = [
+    {key:'balance', label:'⚖️ איזון'},
+    {key:'relief3', label:'🎓 הקלת שנה ג׳'},
+    {key:'relief4', label:'🎓 הקלת שנה ד׳'},
+  ].map(b=>`<button type="button" class="day-chip ${recoSemBias===b.key?'selected':''}" onclick="setRecoSemBias('${b.key}')">${b.label}</button>`).join('');
+
+  let semPreviewHtml = '';
+  if(pendingSemPlan){
+    if(pendingSemPlan.moves.length===0) semPreviewHtml = `<div class="reco-preview"><p style="font-size:12px;color:var(--text-muted)">✓ אין שינויים מומלצים כרגע.</p></div>`;
+    else {
+      semPreviewHtml = `<div class="reco-preview"><div class="reco-preview-title">שיבוצים מוצעים</div><div class="reco-diff-list">
+          ${pendingSemPlan.moves.map(m=>`<div class="reco-diff-item"><span style="font-weight:600">${m.courseName} <span style="font-weight:400">(${m.nz} נ"ז)</span></span><span style="color:var(--text-muted)">סמ' ${m.from} ⟵ <b style="color:var(--green-neon)">סמ' ${m.to}</b></span></div>`).join('')}
+        </div><div class="reco-actions"><button class="reco-apply-btn" onclick="applySemPlacementReco()">✓ החל</button><button class="reco-discard-btn" onclick="pendingSemPlan=null;renderRecoPanel()">בטל</button></div></div>`;
+    }
+  }
+
+  body.innerHTML = `<div class="reco-grid">
+    <div class="reco-card"><h4>📅 דחיסת ימי לימוד</h4><p class="reco-desc">בחר את הימים שבהם תרצה ללמוד. המערכת תשאיר הרצאות במקומן, ותעביר תרגולים/מעבדות לימים שבחרת — בכל הסמסטרים יחד.</p><div class="reco-days">${dayChips}</div><button class="reco-run-btn" onclick="runDayCompression()">חשב המלצה</button>${dayPreviewHtml}</div>
+    <div class="reco-card"><h4>⚖️ איזון עומס נ"ז לסמסטר</h4><p class="reco-desc">הגדר תקרת נ"ז מקסימלית לסמסטר. המערכת תזיז קורסים בלתי-נעולים וקורסי מאגר ששובצו, תוך שמירה על קדמים (כולל אישור למידה במקביל).</p><div class="reco-nz-row"><label style="font-size:12px">נ"ז מקסימלי:</label><input type="number" id="reco-nz-input" step="0.5" value="${recoMaxNz!==null?recoMaxNz:''}" style="padding:6px;width:70px"></div><button class="reco-run-btn" onclick="runNzBalance()">חשב המלצה</button>${nzPreviewHtml}</div>
+    <div class="reco-card"><h4>🧭 באיזה סמסטר לקחת קורס גמיש?</h4><p class="reco-desc">לקורסים עם יותר מאפשרות סמסטר אחת (למשל סמ' 5 או 7) — ממליץ היכן לשבץ, לפי שילוב של עומס נ"ז ועומס ימים בכל סמסטר אפשרי. שומר על קדמים תמיד.</p><div class="reco-days">${biasChips}</div><button class="reco-run-btn" onclick="runSemPlacementReco()">חשב המלצה</button>${semPreviewHtml}</div>
+  </div>`;
+}
+
+// ===================== SETTINGS TAB =====================
+function renderSettings(){
+  const ts = document.getElementById('track-settings'); if(!ts) return;
+  ts.innerHTML = Object.entries(settings.tracks||{}).map(([key,tr])=>`
+    <div class="setting-row">
+      <div><input class="setting-input" style="width:130px;font-weight:600" value="${tr.name}" onchange="settings.tracks['${key}'].name=this.value;saveData();renderSettings()"></div>
+      <div style="display:flex;gap:10px;align-items:center">
+        חישוב:<select class="setting-input" style="width:80px" onchange="settings.tracks['${key}'].reqType=this.value;saveData();renderTrackBar()"><option value="count" ${tr.reqType!=='nz'?'selected':''}>קורסים</option><option value="nz" ${tr.reqType==='nz'?'selected':''}>נ"ז</option></select>
+        חובה (מינ'):<input class="setting-input" type="number" style="width:60px" value="${tr.coreMin}" onchange="settings.tracks['${key}'].coreMin=parseFloat(this.value)||0;saveData();renderTrackBar()">
+        בחירה (מינ'):<input class="setting-input" type="number" style="width:60px" value="${tr.elecMin}" onchange="settings.tracks['${key}'].elecMin=parseFloat(this.value)||0;saveData();renderTrackBar()">
+      </div></div>`).join('');
+
+  document.getElementById('general-settings').innerHTML = `
+    <div class="setting-row"><div>יעד נ"ז לתואר</div><input class="setting-input" style="width:80px" type="number" value="${settings.targetTotalNz||175.5}" onchange="settings.targetTotalNz=parseFloat(this.value)||0;saveData();renderTrackBar()"></div>
+    <div class="setting-row"><div>שם הדרישה (לבלוק הסיכום)</div><input class="setting-input" style="width:120px" type="text" value="${settings.targetTotalNzLabel||'הנדסה'}" onchange="settings.targetTotalNzLabel=this.value||'תואר';saveData();renderTrackBar()"></div>
+    <div class="setting-row"><div>נ"ז שהושלמו בעבר</div><input class="setting-input" style="width:80px" type="number" value="${settings.priorNz||0}" onchange="settings.priorNz=parseFloat(this.value)||0;saveData();renderTrackBar()"></div>`;
+  renderCatSettings(); renderCompTypeSettings();
+}
+
+function renderCompTypeSettings(){
+  const el = document.getElementById('comptype-settings'); if(!el) return;
+  const L = settings.compTypeLabels || DEFAULT_SETTINGS.compTypeLabels;
+  const rows = { lecture:'סוג "הרצאה"', tirgul:'סוג "תרגול"', lab:'סוג "מעבדה"', other:'סוג "אחר"' };
+  el.innerHTML = Object.entries(rows).map(([key,label])=>`
+    <div class="setting-row"><div>${label}</div>
+      <input class="setting-input" style="width:130px" value="${L[key]}" onchange="settings.compTypeLabels['${key}']=this.value||'${key}';saveData();renderSettings();renderPlanner();if(document.getElementById('tab-schedule')&&!document.getElementById('tab-schedule').classList.contains('hidden'))renderSchedule();">
+    </div>`).join('');
+}
+
+function renderCatSettings(){
+  const el = document.getElementById('cat-settings'); if(!el) return;
+  el.innerHTML = (settings.categories||[]).map((cat,idx)=>`
+    <div class="setting-row">
+      <div><button onclick="if(confirm('למחוק?')){settings.categories.splice(${idx},1);saveData();renderSettings()}" style="background:none;border:none;color:var(--red-neon);cursor:pointer;font-size:16px;margin-left:8px">×</button><input class="setting-input" style="width:130px;font-weight:600" value="${cat.name}" onchange="settings.categories[${idx}].name=this.value;saveData()"></div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <select class="setting-input" style="width:80px" onchange="settings.categories[${idx}].reqType=this.value;saveData();renderTrackBar()"><option value="count" ${cat.reqType!=='nz'?'selected':''}>קורסים</option><option value="nz" ${cat.reqType==='nz'?'selected':''}>נ"ז</option></select>
+        דרישה:<input class="setting-input" style="width:60px" type="number" value="${cat.required||0}" onchange="settings.categories[${idx}].required=parseFloat(this.value)||0;saveData();renderTrackBar()">
+        בוצע:<input class="setting-input" style="width:60px" type="number" value="${cat.done||0}" onchange="settings.categories[${idx}].done=parseFloat(this.value)||0;saveData();renderTrackBar()">
+      </div></div>`).join('');
+}
+
+function addCategory(){
+  const name = document.getElementById('new-cat-name').value.trim(); if(!name) return;
+  settings.categories.push({id:'cat_'+Date.now(), name, required:0, done:0, type:'cat_'+Date.now(), reqType:'count'});
+  document.getElementById('new-cat-name').value = ''; saveData(); renderSettings(); renderTypeSelect('f-type'); renderTypeSelect('edit-type');
+}
+
+// ===================== RENDER ALL =====================
+function renderAll(){
+  try {
+      renderPlanner(); renderManageList(); renderTrackPoolPanel();
+      const schTab = document.getElementById('tab-schedule');
+      if(schTab && !schTab.classList.contains('hidden')) renderSchedule();
+      const sumTab = document.getElementById('tab-summary');
+      if(sumTab && !sumTab.classList.contains('hidden')) renderSummary();
+      const setTab = document.getElementById('tab-settings');
+      if(setTab && !setTab.classList.contains('hidden')) renderSettings();
+  } catch(e) { console.error("Render error", e); }
+}
+
+function toggleTheme() {
+  const h = document.documentElement; const n = h.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+  h.setAttribute('data-theme', n); localStorage.setItem('cp_theme_pref', n);
+  const btn = document.getElementById('theme-toggle');
+  if(btn) btn.textContent = n === 'light' ? '🌙 מצב כהה' : '☀️ מצב בהיר';
+  renderSchedule(); 
+}
+
+(function initTheme() {
+  try {
+      const t = localStorage.getItem('cp_theme_pref') || 'dark'; document.documentElement.setAttribute('data-theme', t);
+      window.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('theme-toggle');
+        if(btn) btn.textContent = t === 'light' ? '🌙 מצב כהה' : '☀️ מצב בהיר';
+        loadData(); renderTypeSelect('f-type'); renderColorRow('add-color-row', addSelectedColor, 'add'); initAddComps(); renderAll();
+      });
+  } catch(e) { console.error("Init error", e); }
+})();
+</script>
+</body>
+</html>
